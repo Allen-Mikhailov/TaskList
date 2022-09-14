@@ -3,17 +3,18 @@ import { Button, StyleSheet, Text, View, Pressable, Image } from 'react-native';
 
 const styles = StyleSheet.create({
     markBackground: {
-        width: 40,
-        height: 40,
+        width: 35,
+        height: 35,
         backgroundColor: "#f00",
-        marginHorizontal: "10%",
-        borderRadius: "15%"
+        borderRadius: "5%",
+        left: "10%",
+        top: "-25%"
         // flex: 1
     },
     checkboxContainer: {
         width: "100%",
-        flexDirection: "row-reverse",
-        justifyContent: 'right',
+        // flexDirection: "row-reverse",
+        // justifyContent: 'right',
         flex: 1
     },
     checkmark: {

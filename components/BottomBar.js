@@ -38,14 +38,21 @@ const styles = StyleSheet.create({
         backgroundColor: "#eee",
         position: "absolute",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        // flexDirection: 'row'
     },
 
     taskInput: {
-        fontSize: "20%"
+        marginLeft: "10%",
+        marginRight: "10%",
+        fontSize: "20%",
+        flexShrink: 1,
+        flexWrap: 'wrap',
+        // flex: 1
     },
     taskAddButton: {
-        fontSize: "20%"
+        fontSize: "20%",
+        flex: 1
     }
 })
 
@@ -61,8 +68,13 @@ export default function BottomBar(props)
             placeholder='TaskDescription'
             value={task}
             onChangeText={setTask}
+            multiline={true}
             />
-            <Button title="Add" style={styles.taskAddButton} onPress={() => {props.addTask(task); setTaskOpen(false)}}/>
+            <Button title="Add" style={styles.taskAddButton} onPress={() => {
+                if (task == "") {return} 
+                props.addTask(task); 
+                setTaskOpen(false)
+                }}/>
         </View>}
 
 
