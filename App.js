@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { getJsonData, storeData } from './modules/storage.js';
@@ -17,12 +17,26 @@ const styles = StyleSheet.create({
   },
 
   FlatList: {
-    width: "100%",
-    marginVertical: 30,
-    justifyContent: "left",
-    alignItems: "left",
+    // width: "100%",
+    // marginVertical: 30,
+    // justifyContent: "left",
+    // alignItems: "left",
     // justifyContent: 'top',
+    
   },
+
+  bottomBarButton: {
+    flex: 1,
+    height: "100%",
+    borderColor: "#000",
+    border: "10%",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+},
+buttonText:{
+    fontSize: "40%"
+},
 
   itemContainer: {
     width: "100%",
@@ -93,9 +107,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.FlatList}>
-      <Item item={{key: "???", toggle: false}} i={0} setChecked={setChecked} key={0}/>
+      {/* <Item item={{key: "???", toggle: false}} i={0} setChecked={setChecked} key={0}/> */}
         {/* {data.map((item, i) => <Item item={item} i={i} setChecked={setChecked} key={i}/>)} */}
       </View>
+
+      {/* <CheckBox /> */}
+      <Pressable style={styles.bottomBarButton} onPress={() => console.log("WHYYYYYYYYYYYYYYY")}>
+                <Text style={styles.buttonText}>Add</Text></Pressable>
 
       <BottomBar addTask={addTask} wipe={wipe}/>
       <StatusBar style="auto" />

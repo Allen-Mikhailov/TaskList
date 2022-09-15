@@ -5,14 +5,14 @@ import { useEffect, useState } from 'react';
 const styles = StyleSheet.create({
     bottomBarContainer: {
         width: "100%",
-        height: "100%",
+        height: "9%",
         flex: 1,
         position: "absolute",
         flexDirection: "column-reverse"
     },
     bottomBar: {
         width: "100%",
-        height: "9%",
+        height: "100%",
         backgroundColor: "#aaa",
         flexDirection: "row"
     },
@@ -71,7 +71,7 @@ export default function BottomBar(props)
             multiline={true}
             />
             <Button title="Add" style={styles.taskAddButton} onPress={() => {
-                if (task == "") {return} 
+                if (task == "") {return}
                 props.addTask(task); 
                 setTaskOpen(false)
                 }}/>
