@@ -3,18 +3,19 @@ import { Button, StyleSheet, Text, View, Pressable, Image } from 'react-native';
 
 const styles = StyleSheet.create({
     markBackground: {
-        width: 35,
-        height: 35,
+        width: 25,
+        height: 25,
         backgroundColor: "#f00",
         borderRadius: "5%",
-        left: "10%",
-        top: "-25%"
+        right: "-40%",
+        // top: "-25%"
         // flex: 1
     },
     checkboxContainer: {
-        width: "100%",
-        // flexDirection: "row-reverse",
-        // justifyContent: 'right',
+        // backgroundColor: "blue",
+        flexDirection: "row-reverse",
+        zIndex: 0.5,
+        // hitSlop: 500,
         flex: 1
     },
     checkmark: {
@@ -27,12 +28,18 @@ const styles = StyleSheet.create({
 
 export default function CheckBox(props)
 {
+    const [pressed, setPressed ] = useState(false)
 
-
-    return<Pressable style={styles.checkboxContainer} onPress={() => props.setChecked(!props.checked)}>
+    return <Pressable style={styles.checkboxContainer} 
+    title={"test"}
+    onPress={() => {
+        console.log("Presses")
+        // props.setChecked(!props.checked)
+        setPressed(!pressed)
+        }}>
         <View style={styles.markBackground}>
-            {props.checked? <Image source={require("../images/checkmark.png")} style={styles.checkmark}></Image>: null}
-            <View style={styles.checkmark}></View>
+            {/* {pressed? <Image source={require("../images/checkmark.png")} style={styles.checkmark}></Image>: null} */}
+            {/* <View style={styles.checkmark}></View> */}
         </View>
     </Pressable>
 }

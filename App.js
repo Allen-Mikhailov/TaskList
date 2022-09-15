@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { getJsonData, storeData } from './modules/storage.js';
@@ -35,13 +35,17 @@ const styles = StyleSheet.create({
     marginLeft: "4%",
     fontSize: "30%",
     textAlign: "left"
+  },
+
+  holdupButton: {
+    fontSize: "300%",
   }
 });
 
 function Item({item, i, setChecked})
 {
-  return <View style={styles.itemContainer}>
-    <Text key={i} style={styles.item}>{item.key}</Text>
+  return <View style={styles.itemContainer} key={i}>
+    <Text style={styles.item}>{item.key}</Text>
     <CheckBox checked={item.checked} setChecked={(value) => {
       console.log("Press")
       setChecked(i, value)
@@ -84,10 +88,13 @@ export default function App() {
     setData(d)
   }
 
+  const [holdup, setHoldUp ] = useState("duaduwgduadgaudgawyd")
+
   return (
     <View style={styles.container}>
       <View style={styles.FlatList}>
-        {data.map((item, i) => <Item item={item} i={i} setChecked={setChecked}/>)}
+      <Item item={{key: "???", toggle: false}} i={0} setChecked={setChecked} key={0}/>
+        {/* {data.map((item, i) => <Item item={item} i={i} setChecked={setChecked} key={i}/>)} */}
       </View>
 
       <BottomBar addTask={addTask} wipe={wipe}/>
