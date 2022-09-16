@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Button, Pressable } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button, Pressable, TextInput } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { getJsonData, storeData } from './modules/storage.js';
@@ -17,26 +17,13 @@ const styles = StyleSheet.create({
   },
 
   FlatList: {
-    // width: "100%",
-    // marginVertical: 30,
-    // justifyContent: "left",
-    // alignItems: "left",
-    // justifyContent: 'top',
-    
-  },
+    width: "100%",
+    marginVertical: 30,
+    justifyContent: "left",
+    alignItems: "left",
+    justifyContent: 'top',
 
-  bottomBarButton: {
-    flex: 1,
-    height: "100%",
-    borderColor: "#000",
-    border: "10%",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-},
-buttonText:{
-    fontSize: "40%"
-},
+  },
 
   itemContainer: {
     width: "100%",
@@ -51,24 +38,71 @@ buttonText:{
     textAlign: "left"
   },
 
-  holdupButton: {
-    fontSize: "300%",
+  itemToggled: {
+    marginLeft: "4%",
+    fontSize: "30%",
+    textAlign: "left",
+    color: "#aaa"
+  },
+
+  addTaskScreen: {
+    width: "75%",
+    height: "50%",
+    top: "25%",
+    left: "12.5%",
+    backgroundColor: "#eee",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    // flexDirection: 'row'
+  },
+
+  taskInput: {
+    marginLeft: "10%",
+    marginRight: "10%",
+    fontSize: "20%",
+    flexShrink: 1,
+    flexWrap: 'wrap',
+    // flex: 1
+  },
+  taskAddButton: {
+    fontSize: "20%",
+    flex: 1
   }
 });
 
-function Item({item, i, setChecked})
-{
+function Item({ item, i, setChecked }) {
   return <View style={styles.itemContainer} key={i}>
-    <Text style={styles.item}>{item.key}</Text>
-    <CheckBox checked={item.checked} setChecked={(value) => {
-      console.log("Press")
+    <Text style={item["toggle"] ? styles.itemToggled:styles.item}>{item.key} </Text>
+    <CheckBox checked={item["toggle"]} setChecked={(value) => {
       setChecked(i, value)
-      }}/>
+    }} />
+  </View>
+}
+
+function AddTaskScreen({task, setTask, setAddTaskOpen, addTask}) {
+  return <View style={styles.addTaskScreen}>
+    <TextInput
+      style={styles.taskInput}
+      placeholder='TaskDescription'
+      value={task}
+      onChangeText={setTask}
+      multiline={true}
+    />
+
+    <Button title="Add" style={styles.taskAddButton} onPress={() => {
+      if (task == "") { return }
+      addTask(task);
+      setAddTaskOpen(false)
+    }} />
   </View>
 }
 
 export default function App() {
-  const [data, setData ] = useState([])
+  const [data, setData] = useState([])
+
+  const [task, setTask] = useState("")
+  const [addTaskOpen, setAddTaskOpen] = useState(false)
 
   useEffect(() => {
     getJsonData(dataKey).then((d) => {
@@ -78,44 +112,49 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    setTask("")
+  }, [addTaskOpen])
+
+  useEffect(() => {
     console.log("Stored: ", data)
-    storeData(dataKey, JSON.stringify(data)).then(() => {})
+    storeData(dataKey, JSON.stringify(data)).then(() => { })
   }, [data])
 
-  function addTask(task)
-  {
-    console.log("Add")
+  function addTask(task) {
     const d = JSON.parse(JSON.stringify(data))
-    d.push({key: task, toggle: false})
+    d.push({ key: task, toggle: false })
     setData(d)
   }
 
-  function wipe()
-  {
+  function wipe() {
     setData([])
   }
 
-  function setChecked(i, value)
+  function clear()
   {
+    const d = []
+    data.map((value) => {
+      if (!value.toggle)
+        d.push(value)
+    })
+    setData(d)
+  }
+
+  function setChecked(i, value) {
     const d = JSON.parse(JSON.stringify(data))
     d[i]["toggle"] = value;
     setData(d)
   }
 
-  const [holdup, setHoldUp ] = useState("duaduwgduadgaudgawyd")
-
   return (
     <View style={styles.container}>
       <View style={styles.FlatList}>
-      {/* <Item item={{key: "???", toggle: false}} i={0} setChecked={setChecked} key={0}/> */}
-        {/* {data.map((item, i) => <Item item={item} i={i} setChecked={setChecked} key={i}/>)} */}
+        {data.map((item, i) => <Item item={item} i={i} setChecked={setChecked} key={i} />)}
       </View>
 
-      {/* <CheckBox /> */}
-      <Pressable style={styles.bottomBarButton} onPress={() => console.log("WHYYYYYYYYYYYYYYY")}>
-                <Text style={styles.buttonText}>Add</Text></Pressable>
+      {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} addTask={addTask} setTask={setTask} task={task}/>}
 
-      <BottomBar addTask={addTask} wipe={wipe}/>
+      <BottomBar addTaskOpen={addTaskOpen} setAddTaskOpen={setAddTaskOpen} wipe={wipe} Clear={clear}/>
       <StatusBar style="auto" />
     </View>
   );
