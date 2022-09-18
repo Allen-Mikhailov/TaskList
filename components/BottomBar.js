@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         border: "10%",
         alignItems: "center",
         justifyContent: "center",
-        // borderWidth: 1,
     },
     buttonText:{
         fontSize: "40%"

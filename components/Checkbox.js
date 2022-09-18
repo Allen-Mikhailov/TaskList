@@ -5,22 +5,16 @@ const styles = StyleSheet.create({
     markBackground: {
         width: 30,
         height: 30,
-        // backgroundColor: "#f00",
         borderWidth: 1,
         borderColor: "#000",
         borderRadius: "5%",
         right: "-40%",
-        // top: "-25%"
-        // flex: 1
     },
     checkboxContainer: {
-        // flex: 1,
         borderColor: "#000",
         border: "10%",
         left: "85%",
         position: "absolute",
-        // alignItems: "center",
-        // flexDirection: "row-reverse"
     },
     checkmark: {
         top: "15%",

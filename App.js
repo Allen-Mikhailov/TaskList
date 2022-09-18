@@ -29,10 +29,7 @@ const styles = StyleSheet.create({
   },
 
   itemContainer: {
-    // textAlign: "left",
-    // flexDirection: "row",
-    // alignItems: "center",
-    // backgroundColor: "#f00",
+    justifyContent: "center",
     width: windowWidth
   },
 
@@ -60,7 +57,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
-    // flexDirection: 'row'
   },
 
   taskInput: {
@@ -69,7 +65,6 @@ const styles = StyleSheet.create({
     fontSize: "20%",
     flexShrink: 1,
     flexWrap: 'wrap',
-    // flex: 1
   },
   taskAddButton: {
     fontSize: "20%",
