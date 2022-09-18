@@ -14,12 +14,13 @@ const styles = StyleSheet.create({
         // flex: 1
     },
     checkboxContainer: {
-        flex: 1,
+        // flex: 1,
         borderColor: "#000",
         border: "10%",
+        left: "85%",
+        position: "absolute",
         // alignItems: "center",
-        // justifyContent: "center",
-        flexDirection: "row-reverse"
+        // flexDirection: "row-reverse"
     },
     checkmark: {
         top: "15%",
@@ -32,10 +33,7 @@ const styles = StyleSheet.create({
 export default function CheckBox(props)
 {
     return <Pressable style={styles.checkboxContainer}
-    onPress={() => {
-        console.log(props.checked)
-        props.setChecked(!props.checked)
-        }}>
+        onPress={() => props.setChecked(!props.checked)}>
         <View style={styles.markBackground}>
             {props.checked? <Image source={require("../images/checkmark.png")} style={styles.checkmark}></Image>: null}
             <View style={styles.checkmark}></View>

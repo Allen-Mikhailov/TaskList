@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Pressable, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Button, Image } from 'react-native';
 import { useEffect, useState } from 'react';
 
 const styles = StyleSheet.create({
     bottomBar: {
         position: "absolute",
         width: "100%",
-        height: "9%",
-        top: "91%",
-        backgroundColor: "#aaa",
+        height: "7%",
+        top: "93%",
+        backgroundColor: "#fff",
         flexDirection: "row",
     },
 
@@ -19,20 +19,27 @@ const styles = StyleSheet.create({
         border: "10%",
         alignItems: "center",
         justifyContent: "center",
-        borderWidth: 1,
+        // borderWidth: 1,
     },
     buttonText:{
         fontSize: "40%"
     },
+    Icon: {
+        width: "25%",
+        height: "80%",
+    }
 })
 
 export default function BottomBar({addTaskOpen, setAddTaskOpen, Clear, wipe})
 {
 
     return <View style={styles.bottomBar}>
-            <Pressable style={styles.bottomBarButton} onPress={() => {console.log(addTaskOpen); setAddTaskOpen(!addTaskOpen)}}>
-                <Text style={styles.buttonText}>Add</Text></Pressable>
-            <Pressable style={styles.bottomBarButton} onPress={Clear}><Text style={styles.buttonText}>Clear</Text></Pressable>
-            <Pressable style={styles.bottomBarButton} onPress={wipe}><Text style={styles.buttonText}>Wipe</Text></Pressable>
+            <Pressable style={styles.bottomBarButton} 
+                onPress={() => {console.log(addTaskOpen); setAddTaskOpen(!addTaskOpen)}}>
+                <Image source={require("../images/plusIcon.png")} style={styles.Icon}/></Pressable>
+            <Pressable style={styles.bottomBarButton} onPress={Clear}>
+                <Image source={require("../images/clearIcon.png")} style={styles.Icon}/></Pressable>
+            <Pressable style={styles.bottomBarButton} onPress={wipe}>
+                <Image source={require("../images/wipeIcon.png")} style={styles.Icon}/></Pressable>
         </View>
 }

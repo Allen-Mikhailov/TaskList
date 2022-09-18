@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Button, Pressable, TextInput } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button, Dimensions , TextInput } from 'react-native';
 import { useEffect, useState } from 'react';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 import { getJsonData, storeData } from './modules/storage.js';
 
@@ -22,26 +24,30 @@ const styles = StyleSheet.create({
     justifyContent: "left",
     alignItems: "left",
     justifyContent: 'top',
+    flex: 1
 
   },
 
   itemContainer: {
-    width: "100%",
-    textAlign: "left",
-    flexDirection: "row",
-    alignItems: "center"
+    // textAlign: "left",
+    // flexDirection: "row",
+    // alignItems: "center",
+    // backgroundColor: "#f00",
+    width: windowWidth
   },
 
   item: {
     marginLeft: "4%",
     fontSize: "30%",
-    textAlign: "left"
+    textAlign: "left",
+    marginRight: "20%",
   },
 
   itemToggled: {
     marginLeft: "4%",
     fontSize: "30%",
     textAlign: "left",
+    marginRight: "20%",
     color: "#aaa"
   },
 
@@ -71,11 +77,11 @@ const styles = StyleSheet.create({
   }
 });
 
-function Item({ item, i, setChecked }) {
-  return <View style={styles.itemContainer} key={i}>
-    <Text style={item["toggle"] ? styles.itemToggled:styles.item}>{item.key} </Text>
-    <CheckBox checked={item["toggle"]} setChecked={(value) => {
-      setChecked(i, value)
+function Item({ item, setChecked }) {
+  return <View style={styles.itemContainer}>
+    <Text style={item.item["toggle"] ? styles.itemToggled:styles.item}>{item.item.key} </Text>
+    <CheckBox checked={item.item["toggle"]} setChecked={(value) => {
+      setChecked(item.index, value)
     }} />
   </View>
 }
@@ -104,10 +110,12 @@ export default function App() {
   const [task, setTask] = useState("")
   const [addTaskOpen, setAddTaskOpen] = useState(false)
 
+  const [gotData, setGotData] = useState(false)
+
   useEffect(() => {
     getJsonData(dataKey).then((d) => {
+      setGotData(true)
       setData(d || [])
-      console.log(data)
     })
   }, [])
 
@@ -116,7 +124,8 @@ export default function App() {
   }, [addTaskOpen])
 
   useEffect(() => {
-    console.log("Stored: ", data)
+    if (!gotData) {return}
+    // console.log("Stored: ", data)
     storeData(dataKey, JSON.stringify(data)).then(() => { })
   }, [data])
 
@@ -149,10 +158,15 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.FlatList}>
-        {data.map((item, i) => <Item item={item} i={i} setChecked={setChecked} key={i} />)}
+        <FlatList data={data} renderItem={(item, i) => {
+          return <Item item={item}setChecked={setChecked}/>
+        }
+          } keyExtractor={(item, index)=> index}>
+        </FlatList>
       </View>
 
-      {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} addTask={addTask} setTask={setTask} task={task}/>}
+      {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} 
+        addTask={addTask} setTask={setTask} task={task}/>}
 
       <BottomBar addTaskOpen={addTaskOpen} setAddTaskOpen={setAddTaskOpen} wipe={wipe} Clear={clear}/>
       <StatusBar style="auto" />
