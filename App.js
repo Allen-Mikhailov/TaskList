@@ -7,7 +7,7 @@ const windowHeight = Dimensions.get('window').height;
 import { getJsonData, storeData } from './modules/storage.js';
 
 import BottomBar from './components/BottomBar';
-import CheckBox from './components/Checkbox.js';
+import TaskList from './components/TaskList.js';
 
 const dataKey = "taskData:0.0"
 
@@ -16,36 +16,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-  },
-
-  FlatList: {
-    width: "100%",
-    marginVertical: 30,
-    justifyContent: "left",
-    alignItems: "left",
-    justifyContent: 'top',
-    flex: 1
-
-  },
-
-  itemContainer: {
-    justifyContent: "center",
-    width: windowWidth
-  },
-
-  item: {
-    marginLeft: "4%",
-    fontSize: "30%",
-    textAlign: "left",
-    marginRight: "20%",
-  },
-
-  itemToggled: {
-    marginLeft: "4%",
-    fontSize: "30%",
-    textAlign: "left",
-    marginRight: "20%",
-    color: "#aaa"
   },
 
   addTaskScreen: {
@@ -71,15 +41,6 @@ const styles = StyleSheet.create({
     flex: 1
   }
 });
-
-function Item({ item, setChecked }) {
-  return <View style={styles.itemContainer}>
-    <Text style={item.item["toggle"] ? styles.itemToggled:styles.item}>{item.item.key} </Text>
-    <CheckBox checked={item.item["toggle"]} setChecked={(value) => {
-      setChecked(item.index, value)
-    }} />
-  </View>
-}
 
 function AddTaskScreen({task, setTask, setAddTaskOpen, addTask}) {
   return <View style={styles.addTaskScreen}>
@@ -152,13 +113,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.FlatList}>
-        <FlatList data={data} renderItem={(item, i) => {
-          return <Item item={item}setChecked={setChecked}/>
-        }
-          } keyExtractor={(item, index)=> index}>
-        </FlatList>
-      </View>
+      <TaskList data={data} setChecked={setChecked}/>
 
       {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} 
         addTask={addTask} setTask={setTask} task={task}/>}
