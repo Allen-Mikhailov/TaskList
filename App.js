@@ -4,12 +4,9 @@ import { useEffect, useState } from 'react';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-import { getJsonData, storeData } from './modules/storage.js';
-
 import BottomBar from './components/BottomBar';
 import TaskList from './components/TaskList.js';
-
-const dataKey = "taskData:0.0"
+import DataManager from './components/DataManager';
 
 const styles = StyleSheet.create({
   container: {
@@ -66,24 +63,9 @@ export default function App() {
   const [task, setTask] = useState("")
   const [addTaskOpen, setAddTaskOpen] = useState(false)
 
-  const [gotData, setGotData] = useState(false)
-
-  useEffect(() => {
-    getJsonData(dataKey).then((d) => {
-      setGotData(true)
-      setData(d || [])
-    })
-  }, [])
-
   useEffect(() => {
     setTask("")
   }, [addTaskOpen])
-
-  useEffect(() => {
-    if (!gotData) {return}
-    // console.log("Stored: ", data)
-    storeData(dataKey, JSON.stringify(data)).then(() => { })
-  }, [data])
 
   function addTask(task) {
     const d = JSON.parse(JSON.stringify(data))
@@ -113,12 +95,17 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <DataManager/>
       <TaskList data={data} setChecked={setChecked}/>
 
       {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} 
         addTask={addTask} setTask={setTask} task={task}/>}
 
-      <BottomBar addTaskOpen={addTaskOpen} setAddTaskOpen={setAddTaskOpen} wipe={wipe} Clear={clear}/>
+      <BottomBar 
+        addTaskOpen={addTaskOpen} 
+        setAddTaskOpen={setAddTaskOpen}
+        wipe={wipe} 
+        Clear={clear}/>
       <StatusBar style="auto" />
     </View>
   );
