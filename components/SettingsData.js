@@ -19,7 +19,7 @@ function SettingsData({ settings, setSettings }) {
     useEffect(() => {
         if (!gotSettings) { return }
         // console.log("Stored: ", data)
-        storeData(dataKey, JSON.stringify(data)).then(() => { })
+        storeData(settingsKey, JSON.stringify(settingss)).then(() => { })
     }, [data])
 }
 
