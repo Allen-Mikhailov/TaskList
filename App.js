@@ -7,7 +7,17 @@ const windowHeight = Dimensions.get('window').height;
 import BottomBar from './components/BottomBar';
 import TaskList from './components/TaskList.js';
 import DataManager from './components/DataManager';
+import { SettingsData } from './components/SettingsData';
 import AddTaskScreen from './components/AddTaskScreen';
+
+import SettingsScreen from './components/SettingsScreen';
+import ListDataManager from './components/ListDataManager';
+
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+const Tab = createMaterialTopTabNavigator();
 
 const styles = StyleSheet.create({
   container: {
@@ -17,56 +27,45 @@ const styles = StyleSheet.create({
   },
 });
 
+function range(int)
+{
+  const array = []
+  for (let i = 0; i < int; i++)
+    array.push(i)
+  return array
+}
+
 export default function App() {
   const [data, setData] = useState([])
+  const [settings, setSettings] = useState([])
+  const [ lists, setLists ] = useState({})
 
-  const [task, setTask] = useState("")
-  const [addTaskOpen, setAddTaskOpen] = useState(false)
 
-  useEffect(() => {
-    setTask("")
-  }, [addTaskOpen])
-
-  function addTask(task) {
-    const d = JSON.parse(JSON.stringify(data))
-    d.push({ key: task, toggle: false })
-    setData(d)
-  }
-
-  function wipe() {
-    setData([])
-  }
-
-  function clear()
-  {
-    const d = []
-    data.map((value) => {
-      if (!value.toggle)
-        d.push(value)
-    })
-    setData(d)
-  }
-
-  function setChecked(i, value) {
-    const d = JSON.parse(JSON.stringify(data))
-    d[i]["toggle"] = value;
-    setData(d)
-  }
 
   return (
-    <View style={styles.container}>
-      <DataManager/>
-      <TaskList data={data} setChecked={setChecked}/>
+  //   <View style={styles.container}>
+  //     <DataManager data={data} setData={setData}/>
+  //     <SettingsData settings={settings} setSettings={setSettings}/>
+      
+  //     {/* <TaskList data={data} setChecked={setChecked}/>
 
-      {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} 
-        addTask={addTask} setTask={setTask} task={task}/>}
+  //     {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} 
+  //       addTask={addTask} setTask={setTask} task={task}/>} */}
 
-      <BottomBar 
-        addTaskOpen={addTaskOpen} 
-        setAddTaskOpen={setAddTaskOpen}
-        wipe={wipe} 
-        Clear={clear}/>
-      <StatusBar style="auto" />
-    </View>
+  //     {/* <BottomBar 
+  //       addTaskOpen={addTaskOpen} 
+  //       setAddTaskOpen={setAddTaskOpen}
+  //       wipe={wipe} 
+  //       Clear={clear}/> */}
+  //     <StatusBar style="auto" />
+  //   </View>
+
+<NavigationContainer>
+  <ListDataManager lists={lists} setLists={setLists}/>
+  <Tab.Navigator>
+    <Tab.Screen name="Home" component={HomeScreen} />
+    {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */} 
+  </Tab.Navigator>
+</NavigationContainer>
   );
 }
