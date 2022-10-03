@@ -1,23 +1,25 @@
 import { getJsonData, storeData } from '../modules/storage.js';
+import { DeviceEventEmitter } from 'react-native';
 import { useEffect, useState } from 'react';
 
-const dataKey = "taskData:0.0"
-
-function DataManager({ data, setData })
+function DataManager({ data, setData, datakey, name })
 {
     const [ gotData, setGotData ] = useState(false)
 
     useEffect(() => {
-        getJsonData(dataKey).then((d) => {
+        getJsonData(datakey).then((d) => {
           setGotData(true)
-          setData(d || [])
+          if (d)
+            setData(d)
+          DeviceEventEmitter.emit("event.data."+name, data)
         })
       }, [])
 
       useEffect(() => {
+        DeviceEventEmitter.emit("event.data."+name, data)
         if (!gotData) {return}
         // console.log("Stored: ", data)
-        storeData(dataKey, JSON.stringify(data)).then(() => { })
+        storeData(datakey, JSON.stringify(data)).then(() => { })
       }, [data])
 
     return <></>

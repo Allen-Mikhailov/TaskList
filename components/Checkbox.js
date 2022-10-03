@@ -24,12 +24,12 @@ const styles = StyleSheet.create({
     },
 })
 
-export default function CheckBox(props)
+export default function CheckBox({checked, setChecked})
 {
     return <Pressable style={styles.checkboxContainer}
-        onPress={() => props.setChecked(!props.checked)}>
+        onPress={() => setChecked(!checked)}>
         <View style={styles.markBackground}>
-            {props.checked? <Image source={require("../images/checkmark.png")} style={styles.checkmark}></Image>: null}
+            {checked? <Image source={require("../images/checkmark.png")} style={styles.checkmark}></Image>: null}
             <View style={styles.checkmark}></View>
         </View>
     </Pressable>

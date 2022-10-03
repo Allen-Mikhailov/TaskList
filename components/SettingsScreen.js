@@ -1,4 +1,4 @@
-export default SettingsScreen()
+export default function SettingsScreen()
 {
     
 }

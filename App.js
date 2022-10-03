@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Button, Dimensions , TextInput } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button, Dimensions , TextInput  } from 'react-native';
 import { useEffect, useState } from 'react';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -7,12 +7,11 @@ const windowHeight = Dimensions.get('window').height;
 import BottomBar from './components/BottomBar';
 import TaskList from './components/TaskList.js';
 import DataManager from './components/DataManager';
-import { SettingsData } from './components/SettingsData';
 import AddTaskScreen from './components/AddTaskScreen';
 
 import SettingsScreen from './components/SettingsScreen';
-import ListDataManager from './components/ListDataManager';
 
+import NewListScreen from './components/NewListScreen.js';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -35,11 +34,28 @@ function range(int)
   return array
 }
 
-export default function App() {
-  const [data, setData] = useState([])
-  const [settings, setSettings] = useState([])
-  const [ lists, setLists ] = useState({})
+const listsKey = '@lists:0.0'
+const tagsKey = '@tags:0.0'
+const settingsKey = '@settings:0.0'
+const tasksKey = '@tasks:0.0'
 
+const defaultTags = {
+  School: {
+    color: "blue"
+  },
+  Code: {
+    color: "red"
+  },
+  Other: {
+    color: "orange"
+  }
+}
+
+export default function App() {
+  const [tasks, setTasks] = useState([])
+  const [settings, setSettings] = useState({})
+  const [ lists, setLists ] = useState({})
+  const [ tags, setTags ] = useState(defaultTags)
 
 
   return (
@@ -58,13 +74,16 @@ export default function App() {
   //       wipe={wipe} 
   //       Clear={clear}/> */}
   //     <StatusBar style="auto" />
-  //   </View>
+  //   </View>r
 
 <NavigationContainer>
-  <ListDataManager lists={lists} setLists={setLists}/>
+  <DataManager name="lists"    data={lists} setData={setLists} datakey={listsKey}/>
+  <DataManager name="tasks"    data={tasks} setData={setTasks} datakey={tasksKey}/>
+  <DataManager name="settings" data={settings} setData={setSettings} datakey={settingsKey}/>
+  <DataManager name="tags"     data={tags} setData={setTags} datakey={tagsKey}/>
   <Tab.Navigator>
-    <Tab.Screen name="Home" component={HomeScreen} />
-    {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */} 
+    <Tab.Screen name="NewListScreen" component={NewListScreen} />
+    <Tab.Screen name="Settings"      component={SettingsScreen} /> 
   </Tab.Navigator>
 </NavigationContainer>
   );
