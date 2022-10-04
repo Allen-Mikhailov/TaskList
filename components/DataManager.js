@@ -18,7 +18,7 @@ function DataManager({ data, setData, datakey, name })
       useEffect(() => {
         DeviceEventEmitter.emit("event.data."+name, data)
         if (!gotData) {return}
-        // console.log("Stored: ", data)
+        console.log("Stored "+name+": ", data)
         storeData(datakey, JSON.stringify(data)).then(() => { })
       }, [data])
 

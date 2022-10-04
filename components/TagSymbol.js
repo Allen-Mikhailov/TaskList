@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, FlatList, Button, Dimensions , TextInput, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button, Pressable , TextInput, DeviceEventEmitter } from 'react-native';
 import { useEffect, useState } from 'react';
 
 function TagSymbol({ tag, color, onpress })
 {
-    return <View style={styles.tag}>
+    return <Pressable style={styles.tag} onPress={() => onpress(tag)}>
         <View style={[styles.circle, {backgroundColor: color}]}/>
         <Text style={[styles.tagText]}>{tag}</Text>
-    </View>
+    </Pressable>
 }
 
 const styles = StyleSheet.create({
@@ -19,8 +19,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 1,
-        marginBottom: -10
+        marginBottom: 5
     },
     tagText: {
         color: "black",
