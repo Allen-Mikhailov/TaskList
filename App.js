@@ -68,6 +68,7 @@ export default function App() {
   <DataManager name="settings" datakey={settingsKey}/>
   <DataManager name="tags"     datakey={tagsKey}/>
   <Tab.Navigator>
+    {Object.entries(lists).map(entry => <Tab.Screen name={"List:"+entry[0]} component={TaskList} />)}
     <Tab.Screen name="NewListScreen" component={NewListScreen} />
     <Tab.Screen name="Settings"      component={SettingsScreen} /> 
   </Tab.Navigator>

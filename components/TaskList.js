@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+import { store } from '../store.js';
+
 import CheckBox from '../components/Checkbox.js';
 
 const styles = StyleSheet.create({
@@ -47,8 +49,18 @@ function Item({ item, setChecked }) {
     </View>
   }
 
-function TaskList({ data, setChecked })
+function TaskList()
 {
+  const [ lists, setLists ] = store.useState("lists")
+  const [ tags, setTags ] = store.useState("tags")
+  const [ tasks, setTasks ] = store.useState("lists")
+  const [ data, setData ] = useState([])
+
+  function setChecked()
+  {
+
+  }
+
     return <View style={styles.FlatList}>
         <FlatList 
             data={data} 
