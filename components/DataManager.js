@@ -1,9 +1,11 @@
 import { getJsonData, storeData } from '../modules/storage.js';
 import { DeviceEventEmitter } from 'react-native';
 import { useEffect, useState } from 'react';
+import { store } from "../store.js"
 
-function DataManager({ data, setData, datakey, name })
+function DataManager({ datakey, name })
 {
+    const [ data, setData ] = store.useState(name)
     const [ gotData, setGotData ] = useState(false)
 
     useEffect(() => {
@@ -11,12 +13,10 @@ function DataManager({ data, setData, datakey, name })
           setGotData(true)
           if (d)
             setData(d)
-          DeviceEventEmitter.emit("event.data."+name, data)
         })
       }, [])
 
       useEffect(() => {
-        DeviceEventEmitter.emit("event.data."+name, data)
         if (!gotData) {return}
         console.log("Stored "+name+": ", data)
         storeData(datakey, JSON.stringify(data)).then(() => { })

@@ -12,7 +12,7 @@ import AddTaskScreen from './components/AddTaskScreen';
 import SettingsScreen from './components/SettingsScreen';
 
 import NewListScreen from './components/NewListScreen.js';
-import global from './global';
+import { store } from './store';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -27,14 +27,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-function range(int)
-{
-  const array = []
-  for (let i = 0; i < int; i++)
-    array.push(i)
-  return array
-}
 
 const listsKey = '@lists:0.1'
 const tagsKey = '@tags:0.0'
@@ -53,11 +45,13 @@ const defaultTags = {
   }
 }
 
+store.setState("tasks", []);
+store.setState("settings", {});
+store.setState("lists", {});
+store.setState("tags", defaultTags);
+
 export default function App() {
-  const [tasks, setTasks] = useState([])
-  const [settings, setSettings] = useState({})
-  const [ lists, setLists ] = useState({})
-  const [ tags, setTags ] = useState(defaultTags)
+  const [ lists, setLists ] = store.useState("lists")
 
   DeviceEventEmitter.addListener("event.newList", (listName, tags) => {
     const newLists = JSON.parse(JSON.stringify(lists))
@@ -68,28 +62,11 @@ export default function App() {
   })
 
   return (
-  //   <View style={styles.container}>
-  //     <DataManager data={data} setData={setData}/>
-  //     <SettingsData settings={settings} setSettings={setSettings}/>
-      
-  //     {/* <TaskList data={data} setChecked={setChecked}/>
-
-  //     {addTaskOpen && <AddTaskScreen setAddTaskOpen={setAddTaskOpen} 
-  //       addTask={addTask} setTask={setTask} task={task}/>} */}
-
-  //     {/* <BottomBar 
-  //       addTaskOpen={addTaskOpen} 
-  //       setAddTaskOpen={setAddTaskOpen}
-  //       wipe={wipe} 
-  //       Clear={clear}/> */}
-  //     <StatusBar style="auto" />
-  //   </View>r
-
 <NavigationContainer>
-  <DataManager name="lists"    data={lists} setData={setLists} datakey={listsKey}/>
-  <DataManager name="tasks"    data={tasks} setData={setTasks} datakey={tasksKey}/>
-  <DataManager name="settings" data={settings} setData={setSettings} datakey={settingsKey}/>
-  <DataManager name="tags"     data={tags} setData={setTags} datakey={tagsKey}/>
+  <DataManager name="lists"    datakey={listsKey}/>
+  <DataManager name="tasks"    datakey={tasksKey}/>
+  <DataManager name="settings" datakey={settingsKey}/>
+  <DataManager name="tags"     datakey={tagsKey}/>
   <Tab.Navigator>
     <Tab.Screen name="NewListScreen" component={NewListScreen} />
     <Tab.Screen name="Settings"      component={SettingsScreen} /> 

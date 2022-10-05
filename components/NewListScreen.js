@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, FlatList, Button, Dimensions , TextInput, DeviceEventEmitter } from 'react-native';
 import { useEffect, useState } from 'react';
 
+import { store } from '../store';
+
 import TagSymbol from './TagSymbol';
 
 // () => navigation.navigate('Settings')
@@ -8,7 +10,7 @@ import TagSymbol from './TagSymbol';
 function ListScreen({ navigation })
 {
     const [ listName, setListName ] = useState("")
-    const [ tags, setTags ] = useState({a: 1, b: 2})
+    const [ tags, setTags ] = store.useState("tags")
     const [ listTags, setListTags ] = useState({})
     const [ errorMessage, setErrorMessage ] = useState("")
 
@@ -28,8 +30,6 @@ function ListScreen({ navigation })
     useEffect(() => {
         console.log(listTags)
     }, [listTags])
-
-    DeviceEventEmitter.addListener("event.data.tags", (newTags) => setTags(newTags))
 
     return <View style={styles.container}>
         <Text style={styles.listTitleLabel}>Title</Text>
