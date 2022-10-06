@@ -32,7 +32,7 @@ function ListScreen({ navigation })
     }, [listTags])
 
     return <View style={styles.container}>
-        <Text style={styles.listTitleLabel}>Title</Text>
+        <Text style={styles.listTitleLabel}>New List</Text>
         <TextInput
         style={styles.listTitle}
         text={listName}
@@ -57,6 +57,7 @@ function ListScreen({ navigation })
                     return setErrorMessage("Please Input a list name")
 
                 DeviceEventEmitter.emit("event.newList", listName, listTags)
+                navigation.navigate("NewListScreen")
                 setErrorMessage("")
             }
             }/>

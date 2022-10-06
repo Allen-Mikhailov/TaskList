@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 const listsKey = '@lists:0.1'
 const tagsKey = '@tags:0.0'
 const settingsKey = '@settings:0.0'
-const tasksKey = '@tasks:0.0'
+const tasksKey = '@tasks:0.1'
 
 const defaultTags = {
   School: {
@@ -45,7 +45,7 @@ const defaultTags = {
   }
 }
 
-store.setState("tasks", []);
+store.setState("tasks", {});
 store.setState("settings", {});
 store.setState("lists", {});
 store.setState("tags", defaultTags);
@@ -67,10 +67,15 @@ export default function App() {
   <DataManager name="tasks"    datakey={tasksKey}/>
   <DataManager name="settings" datakey={settingsKey}/>
   <DataManager name="tags"     datakey={tagsKey}/>
-  <Tab.Navigator>
-    {Object.entries(lists).map(entry => <Tab.Screen name={"List:"+entry[0]} component={TaskList} />)}
-    <Tab.Screen name="NewListScreen" component={NewListScreen} />
-    <Tab.Screen name="Settings"      component={SettingsScreen} /> 
+  <Tab.Navigator tabBar={props => <View/>}>
+    {Object.entries(lists).map(([listName, list]) => <Tab.Screen 
+      name={"List:"+listName} 
+      component={TaskList} 
+      initialParams={{ listName: listName }}
+      key={listName}
+      />)}
+    <Tab.Screen name="NewListScreen" component={NewListScreen} options={{headerShown: false}}/>
+    <Tab.Screen name="Settings"      component={SettingsScreen} options={{headerShown: false}}/> 
   </Tab.Navigator>
 </NavigationContainer>
   );
