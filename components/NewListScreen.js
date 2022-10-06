@@ -7,24 +7,26 @@ import TagSymbol from './TagSymbol';
 
 // () => navigation.navigate('Settings')
 
+store.setState("newListTags", {})
+
 function ListScreen({ navigation })
 {
     const [ listName, setListName ] = useState("")
     const [ tags, setTags ] = store.useState("tags")
-    const [ listTags, setListTags ] = useState({})
+    const [ listTags, setListTags, updateListTags ] = store.useState("newListTags")
     const [ errorMessage, setErrorMessage ] = useState("")
 
     function AddTag(tag)
     {
         console.log("Press")
-        listTags[tag] = true
-        setListTags(JSON.parse(JSON.stringify(listTags)))
+        updateListTags(tags => {tags[tag] = true})
+        // listTags[tag] = true
+        // setListTags(JSON.parse(JSON.stringify(listTags)))
     }
 
     function RemoveTag(tag)
     {
-        delete  listTags[tag]
-        setListTags(JSON.parse(JSON.stringify(listTags)))
+        updateListTags(tags => {delete tags[tag]})
     }
 
     useEffect(() => {
@@ -41,10 +43,12 @@ function ListScreen({ navigation })
 
         <View style={styles.TagCheckList}>
             <View style={[styles.IsolatedView, {width: "100%"}]}>
-                {Object.entries(listTags).map((entry, i) => <View key={i} style={[styles.TagCheckContainer, 
+                {Object.entries(listTags).map((entry, i) => (
+                <View key={i} style={[styles.TagCheckContainer, 
                     {alignSelf: "flex-end", }]}>
                     <TagSymbol tag={entry[0]} color={tags[entry[0]].color} onpress={RemoveTag}/>
-                </View>)}
+                </View>
+                ))}
             </View>
             <View style={styles.IsolatedView}>
                 {Object.entries(tags).map((entry, i) => !listTags[entry[0]] && <View key={i} style={[styles.TagCheckContainer, {alignSelf: "flex-start"}]}>
