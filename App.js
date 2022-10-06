@@ -74,8 +74,8 @@ export default function App() {
       initialParams={{ listName: listName }}
       key={listName}
       />)}
-    <Tab.Screen name="NewListScreen" component={NewListScreen} options={{headerShown: false}}/>
-    <Tab.Screen name="Settings"      component={SettingsScreen} options={{headerShown: false}}/> 
+    <Tab.Screen name="NewListScreen" component={NewListScreen}/>
+    <Tab.Screen name="Settings"      component={SettingsScreen}/> 
   </Tab.Navigator>
 </NavigationContainer>
   );
