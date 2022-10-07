@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Button, Dimensions, TextInput } from 'react-native';
-import { useEffect, useState, useRef } from 'react';
+import { StyleSheet, Text, View, FlatList, Pressable, Dimensions, TextInput } from 'react-native';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -8,7 +9,6 @@ import { store } from '../store.js';
 
 import CheckBox from '../components/Checkbox.js';
 import TagSymbol from './TagSymbol.js';
-import Pressable from 'react-native/Libraries/Components/Pressable/Pressable.js';
 
 const styles = StyleSheet.create({
   FlatList: {
@@ -76,14 +76,16 @@ function findCommonElement(array1, array2) {
 
 function ListItem({ item, i }) {
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
+  console.log(item, tasks[item])
+  
 
   return <View style={styles.itemContainer} key={i}>
-    <CheckBox checked={tasks[item]["toggle"]} setChecked={(value) => {
+    <CheckBox checked={tasks[item] && tasks[item]["toggle"]} setChecked={(value) => {
       updateTasks(tasks => {
         tasks[item]["toggle"] = value
       })
     }} />
-    <Text style={[styles.item, tasks[item]["toggle"] ? styles.itemToggled : null]}>{item} </Text>
+    <Text style={[styles.item, (tasks[item] && tasks[item]["toggle"]) ? styles.itemToggled : null]}>{item} </Text>
   </View>
 }
 
@@ -126,7 +128,7 @@ function ListFooter({listName}) {
   </Pressable>
 }
 
-function TaskList({ route }) {
+function TaskList({ route, navigation }) {
   const { listName } = route.params;
   const [lists, setLists] = store.useState("lists")
   const [tags, setTags] = store.useState("tags")
@@ -134,22 +136,25 @@ function TaskList({ route }) {
   const [data, setData] = useState([])
 
   useEffect(() => {
-    console.log(tasks)
     const newData = []
     const list = lists[listName]
     Object.entries(tasks).forEach(([taskName, task]) => {
       if (findCommonElement(Object.keys(list.tags), Object.keys(task.tags)))
         newData.push(taskName)
     })
-    console.log(newData)
     setData(newData)
   }, [lists, tasks])
 
-  function setChecked(task, value) {
+  const unsubscribe = navigation.addListener('blur', (e) => {
+    // Prevent default action
     updateTasks(tasks => {
-      tasks[task]["toggle"] = value
+      Object.keys(tasks).map(key => {
+        if (tasks[key]["toggle"])
+          delete tasks[key]
+      })
+      console.log("tasks", tasks)
     })
-  }
+  });
 
   return <View style={styles.container}>
     <View style={styles.header}>
