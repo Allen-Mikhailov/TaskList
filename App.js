@@ -1,10 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, DeviceEventEmitter, Button, Dimensions , TextInput  } from 'react-native';
+import { StyleSheet, View, DeviceEventEmitter, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
 
-import BottomBar from './components/BottomBar';
 import TaskList from './components/TaskList.js';
 import DataManager from './components/DataManager';
 import AddTaskScreen from './components/AddTaskScreen';
@@ -18,7 +15,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
-
 
 const styles = StyleSheet.create({
   container: {
@@ -51,15 +47,14 @@ store.setState("lists", {});
 store.setState("tags", defaultTags);
 
 export default function App() {
-  const [ lists, setLists ] = store.useState("lists")
+  const [ lists, setLists, updateLists ] = store.useState("lists")
 
   DeviceEventEmitter.addListener("event.newList", (listName, tags) => {
-    const newLists = JSON.parse(JSON.stringify(lists))
-    newLists[listName] = {
+    updateLists(lists => {
+      lists[listName] = {
       tags: tags
     }
-    setLists(newLists)
-  })
+  })})
 
   return (
 <NavigationContainer>

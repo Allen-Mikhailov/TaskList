@@ -18,10 +18,7 @@ function ListScreen({ navigation })
 
     function AddTag(tag)
     {
-        console.log("Press")
         updateListTags(tags => {tags[tag] = true})
-        // listTags[tag] = true
-        // setListTags(JSON.parse(JSON.stringify(listTags)))
     }
 
     function RemoveTag(tag)
