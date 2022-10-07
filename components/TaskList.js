@@ -152,7 +152,6 @@ function TaskList({ route, navigation }) {
         if (tasks[key]["toggle"])
           delete tasks[key]
       })
-      console.log("tasks", tasks)
     })
   });
 

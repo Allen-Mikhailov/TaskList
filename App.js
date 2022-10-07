@@ -2,27 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, DeviceEventEmitter, Dimensions } from 'react-native';
 import { useEffect, useState } from 'react';
 
-import TaskList from './components/TaskList.js';
 import DataManager from './components/DataManager';
-import AddTaskScreen from './components/AddTaskScreen';
-
-import SettingsScreen from './components/SettingsScreen';
-
-import NewListScreen from './components/NewListScreen.js';
 import { store } from './store';
+
+import TaskList from './components/TaskList.js';
+import SettingsScreen from './components/SettingsScreen';
+import NewListScreen from './components/NewListScreen.js';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const Tab = createMaterialTopTabNavigator();
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-  },
-});
 
 const listsKey = '@lists:0.1'
 const tagsKey = '@tags:0.0'
