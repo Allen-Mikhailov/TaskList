@@ -8,6 +8,7 @@ import { store } from './store';
 import TaskList from './components/TaskList.js';
 import SettingsScreen from './components/SettingsScreen';
 import NewListScreen from './components/NewListScreen.js';
+import EditListScreen from './components/EditListScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -69,7 +70,11 @@ export default function App() {
       key={listName}
       />)}
     <Tab.Screen name="NewListScreen" component={NewListScreen}/>
-    <Tab.Screen name="Settings"      component={SettingsScreen}/> 
+    <Tab.Screen name="Settings"      component={SettingsScreen}/>
+
+    <Tab.Group screenOptions={{ presentation: 'modal' }}>
+      <Tab.Screen name="EditList"      component={EditListScreen}/> 
+    </Tab.Group>
   </Tab.Navigator>
 </NavigationContainer>
   );

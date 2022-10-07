@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, Dimensions, TextInput } from 'react-native';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { StyleSheet, Text, View, FlatList, 
+  Pressable, Dimensions, TextInput, Image } from 'react-native';
+import { useEffect, useState, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -60,8 +61,19 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: "250%",
     // backgroundColor: "red"
+  },
+  wrenchIcon: {
+    width: windowHeight * .075,
+    height: windowHeight * .075,
+    position: "absolute",
+    // top: "10%",
+    top: -windowHeight * .05,
+    left: "80%",
+    // backgroundColor: "red"
   }
 })
+
+const wrenchIcon = require("../images/wrench.png")
 
 function findCommonElement(array1, array2) {
   for (let i = 0; i < array1.length; i++) {
@@ -158,6 +170,7 @@ function TaskList({ route, navigation }) {
   return <View style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.listTitle}>{listName}</Text>
+      <Pressable><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
       <View style={styles.tagDisplay}>
         {Object.entries(lists[listName].tags).map(([tagName, tagD]) => {
           return <TagSymbol tag={tagName} color={tags[tagName].color} />

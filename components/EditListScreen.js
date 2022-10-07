@@ -14,11 +14,16 @@ export default function EditListScreen({ navigation, route })
     const [lists, setLists] = store.useState("lists")
     const [tags, setTags] = store.useState("tags")
 
-    return <View>
+    return <View style={styles.container}>
         
     </View>
 }
 
 const styles = StyleSheet.create({
-
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
 })
