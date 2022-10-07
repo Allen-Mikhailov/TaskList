@@ -5,8 +5,6 @@ import { store } from '../store';
 
 import TagSymbol from './TagSymbol';
 
-// () => navigation.navigate('Settings')
-
 store.setState("newListTags", {})
 
 function ListScreen({ navigation })

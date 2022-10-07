@@ -8,13 +8,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#000",
         borderRadius: "5%",
-        right: "-40%",
     },
     checkboxContainer: {
         borderColor: "#000",
         border: "10%",
-        left: "85%",
-        position: "absolute",
+        // justifyContent: "center"
     },
     checkmark: {
         top: "15%",

@@ -41,7 +41,16 @@ const defaultTags = {
   }
 }
 
-store.setState("tasks", {});
+store.setState("tasks", {
+  HelloWorld: {
+    "toggle": true,
+    tags: {School: true}
+  },
+  HelloWorld3: {
+    "toggle": true,
+    tags: {}
+  }
+});
 store.setState("settings", {});
 store.setState("lists", {});
 store.setState("tags", defaultTags);
