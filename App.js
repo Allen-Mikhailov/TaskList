@@ -66,7 +66,7 @@ export default function App() {
           name={"List:"+listName} 
           component={TaskList} 
           initialParams={{ listName: listName }}
-          key={listName}
+          key={"List:"+listName}
           />)}
     <Tab.Screen name="NewListScreen" component={NewListScreen}/>
     <Tab.Screen name="Settings"      component={SettingsScreen}/>

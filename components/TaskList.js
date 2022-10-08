@@ -167,7 +167,7 @@ function TaskList({ route, navigation }) {
       <Pressable onPress={() => navigation.navigate("EditList")}><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
       <View style={styles.tagDisplay}>
         {Object.entries(lists[listName].tags).map(([tagName, tagD]) => {
-          return <TagSymbol tag={tagName} color={tags[tagName].color} />
+          return <TagSymbol tag={tagName} key={tagName} color={tags[tagName].color} />
         })}
       </View>
     </View>

@@ -11,11 +11,33 @@ import TagSymbol from './TagSymbol.js';
 export default function EditListScreen({ navigation, route })
 {
     const { listName } = route.params;
-    const [lists, setLists] = store.useState("lists")
+    const [lists, setLists, updateLists] = store.useState("lists")
     const [tags, setTags] = store.useState("tags")
+    const [ newListName, setNewListName ] = useState(listName)
+
+    function DeleteList()
+    {
+        updateLists(lists => {
+            delete lists[listName]
+        })
+    }
 
     return <View style={styles.container}>
-        
+        {/* Edit List Name */}
+        <View style={styles.EditListNameContainer}>
+            <Text style={styles.EditListNameText}>List Name</Text> 
+            <TextInput 
+                text={newListName} 
+                onChangeText={setNewListName} 
+                placeholder="Untitled" 
+                style={styles.EditListNameInput}
+            />
+        </View>
+
+        {/* Delete Button */}
+        <Pressable style={styles.deleteButton} onPress={DeleteList}>
+            <Text style={styles.deleteText}>DELETE</Text>
+        </Pressable>
     </View>
 }
 
@@ -28,6 +50,14 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         borderRadius: "10%",
-        backgroundColor: "#e33947"
+        backgroundColor: "#f7746a",
+        borderWidth: 3,
+        borderColor: "#e33947",
+        padding: "3%",
+        paddingHorizontal: "10%",
+    },
+    deleteText: {
+        fontSize: "15%",
+        color: "white"
     }
 })
