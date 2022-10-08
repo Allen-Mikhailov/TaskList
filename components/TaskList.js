@@ -117,6 +117,7 @@ function ListFooter({listName}) {
   function End()
   {
     updateTasks(tasks => {
+      if (newTask == "") return
       tasks[newTask] = {
         tags: lists[listName].tags,
         toggle: false
