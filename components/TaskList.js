@@ -3,8 +3,11 @@ import { StyleSheet, Text, View, FlatList,
   Pressable, Dimensions, TextInput, Image } from 'react-native';
 import { useEffect, useState, useRef } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+import EditListScreen from './EditListScreen.js';
 
 import { store } from '../store.js';
 
@@ -21,7 +24,6 @@ const styles = StyleSheet.create({
     flex: 1
 
   },
-
   itemContainer: {
     // justifyContent: "center",
     flexDirection: "row",
@@ -140,6 +142,8 @@ function ListFooter({listName}) {
   </Pressable>
 }
 
+const Stack = createStackNavigator();
+
 function TaskList({ route, navigation }) {
   const { listName } = route.params;
   const [lists, setLists] = store.useState("lists")
@@ -157,20 +161,10 @@ function TaskList({ route, navigation }) {
     setData(newData)
   }, [lists, tasks])
 
-  const unsubscribe = navigation.addListener('blur', (e) => {
-    // Prevent default action
-    updateTasks(tasks => {
-      Object.keys(tasks).map(key => {
-        if (tasks[key]["toggle"])
-          delete tasks[key]
-      })
-    })
-  });
-
   return <View style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.listTitle}>{listName}</Text>
-      <Pressable><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
+      <Pressable onPress={() => navigation.navigate("EditList")}><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
       <View style={styles.tagDisplay}>
         {Object.entries(lists[listName].tags).map(([tagName, tagD]) => {
           return <TagSymbol tag={tagName} color={tags[tagName].color} />
@@ -184,10 +178,28 @@ function TaskList({ route, navigation }) {
           ({ item, i }) => <ListItem item={item} i={i}/>
         }
         ListFooterComponent={() => <ListFooter listName={listName} />}
-        keyExtractor={(item, index) => index}>
-      </FlatList>
+        keyExtractor={(item, index) => index}/>
     </View>
   </View>
 }
 
-export default TaskList
+export default function TaskListScreen({ navigation, route })
+{
+  const { listName } = route.params;
+  const [tasks, setTasks, updateTasks] = store.useState("tasks")
+  const unsubscribe = navigation.addListener('blur', (e) => {
+    updateTasks(tasks => {
+      Object.keys(tasks).map(key => {
+        if (tasks[key]["toggle"])
+          delete tasks[key]
+      })
+    })
+  });
+
+  return <Stack.Navigator>
+    <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listName: listName }} options={{headerShown:false}}/>
+    <Stack.Group screenOptions={{ presentation: 'modal' }}>
+      <Stack.Screen name="EditList" component={EditListScreen} initialParams={{ listName: listName }}/>
+    </Stack.Group>
+  </Stack.Navigator>
+}

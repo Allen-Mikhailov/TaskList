@@ -55,7 +55,6 @@ export default function App() {
       tags: tags
     }
   })})
-
   return (
 <NavigationContainer>
   <DataManager name="lists"    datakey={listsKey}/>
@@ -64,17 +63,13 @@ export default function App() {
   <DataManager name="tags"     datakey={tagsKey}/>
   <Tab.Navigator tabBar={props => <View/>}>
     {Object.entries(lists).map(([listName, list]) => <Tab.Screen 
-      name={"List:"+listName} 
-      component={TaskList} 
-      initialParams={{ listName: listName }}
-      key={listName}
-      />)}
+          name={"List:"+listName} 
+          component={TaskList} 
+          initialParams={{ listName: listName }}
+          key={listName}
+          />)}
     <Tab.Screen name="NewListScreen" component={NewListScreen}/>
     <Tab.Screen name="Settings"      component={SettingsScreen}/>
-
-    <Tab.Group screenOptions={{ presentation: 'modal' }}>
-      <Tab.Screen name="EditList"      component={EditListScreen}/> 
-    </Tab.Group>
   </Tab.Navigator>
 </NavigationContainer>
   );
