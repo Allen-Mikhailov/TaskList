@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View, FlatList, Button, Pressable , TextInput, DeviceEventEmitter } from 'react-native';
 import { useEffect, useState } from 'react';
 
+const empty = () => {}
+
 function TagSymbol({ tag, color, onpress })
 {
-    return <Pressable style={styles.tag} onPress={() => onpress(tag)}>
+    return <Pressable style={styles.tag} onPress={() => (onpress || empty)(tag)}>
         <View style={[styles.circle, {backgroundColor: color}]}/>
         <Text style={[styles.tagText]}>{tag}</Text>
     </Pressable>

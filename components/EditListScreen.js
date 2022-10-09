@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable, Dimensions, TextInput, Image } from 'react-native';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 const windowWidth = Dimensions.get('window').width;
@@ -10,39 +10,38 @@ import TagSymbol from './TagSymbol.js';
 
 export default function EditListScreen({ navigation, route })
 {
-    const { listName } = route.params;
+    const { listId } = route.params;
     const [lists, setLists, updateLists] = store.useState("lists")
     const [tags, setTags] = store.useState("tags")
-    const [ newListName, setNewListName ] = useState(listName)
+    const [ newListName, setNewListName ] = useState(lists[listId].name)
     const [ changed, setChanged ] = useState(false)
 
     function DeleteList()
     {
         updateLists(lists => {
-            delete lists[listName]
+            delete lists[listId]
         })
     }
 
     function ApplyEdits()
     {
         updateLists(lists => {
-            if (newListName != listName)
-            {
-                const list = lists[listName]
-                delete lists[listName]
-                lists[newListName] = list
-            }
+            lists[listId].name = newListName
         })
+        setChanged(false)
     }
 
     function ListNameChanged(newText)
     {
-        if (newText != listName && !changed)
+        if (newText != listId && !changed)
             setChanged(true)
         setNewListName(newText)
     }
 
     return <View style={styles.container}>
+        {/* Edit List Header */}
+        <Text style={styles.header}>{newListName}</Text>
+
         {/* Edit List Name */}
         <View style={styles.EditListNameContainer}>
             <Text style={styles.EditListNameText}>List Name</Text> 
@@ -51,6 +50,25 @@ export default function EditListScreen({ navigation, route })
                 onChangeText={ListNameChanged} 
                 placeholder="Untitled" 
                 style={styles.EditListNameInput}
+            />
+        </View>
+
+        {/* Tag Editor */}
+        <View style={styles.tagBackground}>
+            <FlatList
+            style={styles.tagContainer} 
+            data={Object.keys(tags)}
+            renderItem={({item}) => <Pressable style={styles.tag} onPress={
+                () => updateLists(lists => {
+                    if (lists[listId].tags[item])
+                        delete lists[listId].tags[item]
+                    else
+                        lists[listId].tags[item] = true
+                })}>
+                    <View style={[styles.tagCircle, {backgroundColor: tags[item].color || "red"}]}/>
+                    <Text style={styles.tagText}>{item}</Text>
+                    {lists[listId].tags[item] && <Image source={require("../images/whiteCheck.png")} style={styles.tagCheck}/>}
+                </Pressable>}
             />
         </View>
 
@@ -115,5 +133,53 @@ const styles = StyleSheet.create({
         fontSize: "15%",
         color: "black",
         fontWeight: "bold"
+    },
+    header: {
+        fontSize: "50%"
+    },
+
+    // Tag editor
+    tagBackground: {
+        width: "50%",
+        height: "40%",
+        backgroundColor: "grey",
+        borderRadius: "25%",
+        marginBottom: "5%",
+        borderWidth: 2
+    },
+    tagContainer: {
+        width: "100%",
+        marginVertical: "10%",
+        borderTopWidth: 2,
+    },
+    tag: {
+        width: "100%",
+        height: windowHeight*.075,
+        borderBottomWidth: 2,
+        justifyContent: "space-evenly",
+    },
+    tagCircle: {
+        width: windowWidth*.05,
+        height: windowWidth*.05,
+        borderRadius: "50%",
+        marginLeft: "5%",
+        // position: "relative",
+        top: "25%"
+    },
+    tagText: {
+        fontSize: "20%",
+        marginLeft: "20%",
+        top: "-25%",
+        fontWeight: "bold",
+        color: "white",
+    },
+    tagCheck: {
+        width: windowWidth*.08,
+        height: windowWidth*.08,
+        borderRadius: "50%",
+        marginLeft: "80%",
+        top: "20%",
+        position: "absolute",
+        // top: windowWidth*(.075-.05)
     }
 })

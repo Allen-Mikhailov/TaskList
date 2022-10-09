@@ -49,12 +49,6 @@ store.setState("tags", defaultTags);
 export default function App() {
   const [ lists, setLists, updateLists ] = store.useState("lists")
 
-  DeviceEventEmitter.addListener("event.newList", (listName, tags) => {
-    updateLists(lists => {
-      lists[listName] = {
-      tags: tags
-    }
-  })})
   return (
 <NavigationContainer>
   <DataManager name="lists"    datakey={listsKey}/>
@@ -62,14 +56,14 @@ export default function App() {
   <DataManager name="settings" datakey={settingsKey}/>
   <DataManager name="tags"     datakey={tagsKey}/>
   <Tab.Navigator tabBar={props => <View/>}>
-    {Object.entries(lists).map(([listName, list]) => <Tab.Screen 
-          name={"List:"+listName} 
+    <Tab.Screen name="Settings"      component={SettingsScreen}/>
+    {Object.entries(lists).map(([listId, list]) => <Tab.Screen 
+          name={"List:"+listId} 
           component={TaskList} 
-          initialParams={{ listName: listName }}
-          key={"List:"+listName}
+          initialParams={{ listId: listId }}
+          key={"List:"+listId}
           />)}
     <Tab.Screen name="NewListScreen" component={NewListScreen}/>
-    <Tab.Screen name="Settings"      component={SettingsScreen}/>
   </Tab.Navigator>
 </NavigationContainer>
   );

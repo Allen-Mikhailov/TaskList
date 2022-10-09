@@ -90,9 +90,7 @@ function findCommonElement(array1, array2) {
 
 function ListItem({ item, i }) {
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
-  console.log(item, tasks[item])
   
-
   return <View style={styles.itemContainer} key={i}>
     <CheckBox checked={tasks[item] && tasks[item]["toggle"]} setChecked={(value) => {
       updateTasks(tasks => {
@@ -103,7 +101,7 @@ function ListItem({ item, i }) {
   </View>
 }
 
-function ListFooter({listName}) {
+function ListFooter({listId}) {
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const [lists, setLists] = store.useState("lists")
   const [inFocus, setInFocus] = useState(false)
@@ -119,7 +117,7 @@ function ListFooter({listName}) {
     updateTasks(tasks => {
       if (newTask == "") return
       tasks[newTask] = {
-        tags: lists[listName].tags,
+        tags: lists[listId].tags,
         toggle: false
       }
     })
@@ -146,15 +144,17 @@ function ListFooter({listName}) {
 const Stack = createStackNavigator();
 
 function TaskList({ route, navigation }) {
-  const { listName } = route.params;
+  const { listId } = route.params;
   const [lists, setLists] = store.useState("lists")
   const [tags, setTags] = store.useState("tags")
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const [data, setData] = useState([])
+  console.log(lists)
+  console.log(listId)
 
   useEffect(() => {
     const newData = []
-    const list = lists[listName]
+    const list = lists[listId]
     Object.entries(tasks).forEach(([taskName, task]) => {
       if (findCommonElement(Object.keys(list.tags), Object.keys(task.tags)))
         newData.push(taskName)
@@ -164,10 +164,10 @@ function TaskList({ route, navigation }) {
 
   return <View style={styles.container}>
     <View style={styles.header}>
-      <Text style={styles.listTitle}>{listName}</Text>
+      <Text style={styles.listTitle}>{lists[listId].name}</Text>
       <Pressable onPress={() => navigation.navigate("EditList")}><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
       <View style={styles.tagDisplay}>
-        {Object.entries(lists[listName].tags).map(([tagName, tagD]) => {
+        {Object.entries(lists[listId].tags).map(([tagName, tagD]) => {
           return <TagSymbol tag={tagName} key={tagName} color={tags[tagName].color} />
         })}
       </View>
@@ -178,7 +178,7 @@ function TaskList({ route, navigation }) {
         renderItem={
           ({ item, i }) => <ListItem item={item} i={i}/>
         }
-        ListFooterComponent={() => <ListFooter listName={listName} />}
+        ListFooterComponent={() => <ListFooter listId={listId} />}
         keyExtractor={(item, index) => index}/>
     </View>
   </View>
@@ -186,7 +186,7 @@ function TaskList({ route, navigation }) {
 
 export default function TaskListScreen({ navigation, route })
 {
-  const { listName } = route.params;
+  const { listId } = route.params;
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const unsubscribe = navigation.addListener('blur', (e) => {
     updateTasks(tasks => {
@@ -198,9 +198,9 @@ export default function TaskListScreen({ navigation, route })
   });
 
   return <Stack.Navigator>
-    <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listName: listName }} options={{headerShown:false}}/>
+    <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listId: listId }} options={{headerShown:false}}/>
     <Stack.Group screenOptions={{ presentation: 'modal' }}>
-      <Stack.Screen name="EditList" component={EditListScreen} initialParams={{ listName: listName }}/>
+      <Stack.Screen name="EditList" component={EditListScreen} initialParams={{ listId: listId }}/>
     </Stack.Group>
   </Stack.Navigator>
 }

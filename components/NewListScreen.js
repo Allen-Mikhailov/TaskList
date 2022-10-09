@@ -1,16 +1,19 @@
 import { StyleSheet, Text, View, FlatList, Button, Dimensions , TextInput, DeviceEventEmitter } from 'react-native';
 import { useEffect, useState } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from '../store';
+import { getNewId } from '../modules/keys';
 
 import TagSymbol from './TagSymbol';
 
 store.setState("newListTags", {})
 
-function ListScreen({ navigation })
+function ListScreen({ route, navigation })
 {
     const [ listName, setListName ] = useState("")
     const [ tags, setTags ] = store.useState("tags")
+    const [ lists, setLists, updateLists ] = store.useState("lists")
     const [ listTags, setListTags, updateListTags ] = store.useState("newListTags")
     const [ errorMessage, setErrorMessage ] = useState("")
 
@@ -29,7 +32,6 @@ function ListScreen({ navigation })
     }, [listTags])
 
     return <View style={styles.container}>
-        <Text style={styles.listTitleLabel}>New List</Text>
         <TextInput
         style={styles.listTitle}
         text={listName}
@@ -46,7 +48,8 @@ function ListScreen({ navigation })
                 ))}
             </View>
             <View style={styles.IsolatedView}>
-                {Object.entries(tags).map((entry, i) => !listTags[entry[0]] && <View key={i} style={[styles.TagCheckContainer, {alignSelf: "flex-start"}]}>
+                {Object.entries(tags).map((entry, i) => !listTags[entry[0]] && <View key={i} 
+                style={[styles.TagCheckContainer, {alignSelf: "flex-start"}]}>
                     <TagSymbol tag={entry[0]} color={entry[1].color} onpress={AddTag}/>
                 </View>)}
             </View>
@@ -55,8 +58,16 @@ function ListScreen({ navigation })
                 if (listName == "")
                     return setErrorMessage("Please Input a list name")
 
-                DeviceEventEmitter.emit("event.newList", listName, listTags)
-                navigation.navigate("NewListScreen")
+                updateLists(lists => {
+                    const id = getNewId(lists)
+                    console.log(id)
+                    lists[id] = {
+                        name: listName,
+                        tags: listTags
+                    }
+                })
+
+                navigation.navigate("NewList")
                 setErrorMessage("")
             }
             }/>
@@ -65,18 +76,31 @@ function ListScreen({ navigation })
     </View>
 }
 
+const Stack = createStackNavigator();
+
+function NewList({ route, navigation })
+{
+    return <View style={styles.container}>
+        <Button title="Create New List" onPress={() => navigation.navigate("NewListModal")}/>
+    </View>
+}
+
+export default function NewListScreen()
+{
+    return <Stack.Navigator>
+        <Stack.Screen name="NewList" component={NewList} options={{headerShown:false}}/>
+        <Stack.Group screenOptions={{ presentation: 'modal' }}>
+            <Stack.Screen name="NewListModal" component={ListScreen}/>
+        </Stack.Group>
+    </Stack.Navigator>
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#ddd",
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    listTitleLabel: {
-        fontSize: "20%",
-        position: "absolute",
-        color: "#aaa",
-        top: "2%"
     },
     listTitle: {
         fontSize: "60%",
@@ -98,5 +122,3 @@ const styles = StyleSheet.create({
         fontSize: 15
     }
 })
-
-export default ListScreen
