@@ -65,9 +65,10 @@ function ListScreen({ route, navigation })
                         name: listName,
                         tags: listTags
                     }
-                })
 
-                navigation.navigate("NewList")
+                    console.log("Transfering", "List:"+id)
+                    DeviceEventEmitter.emit("event.screenTransfer", "List:"+id)
+                })
                 setErrorMessage("")
             }
             }/>
@@ -85,8 +86,21 @@ function NewList({ route, navigation })
     </View>
 }
 
-export default function NewListScreen()
+export default function NewListScreen({navigation})
 {
+    const [loadedLists] = store.useState("loadedLists")
+    const [screenTransfer, setScreenTransfer] = useState()
+
+    DeviceEventEmitter.addListener("event.screenTransfer", (screen) => {
+        console.log("Transfer", screen)
+        setScreenTransfer(screen)
+    })
+
+    useEffect(() => {
+        if (loadedLists[screenTransfer])
+            navigation.navigate(screenTransfer)
+    }, [loadedLists, screenTransfer])
+
     return <Stack.Navigator>
         <Stack.Screen name="NewList" component={NewList} options={{headerShown:false}}/>
         <Stack.Group screenOptions={{ presentation: 'modal' }}>

@@ -11,7 +11,7 @@ import EditListScreen from './EditListScreen.js';
 
 import { store } from '../store.js';
 
-import CheckBox from '../components/Checkbox.js';
+import CheckBox from '../components/RadioButton';
 import TagSymbol from './TagSymbol.js';
 
 const styles = StyleSheet.create({
@@ -90,15 +90,26 @@ function findCommonElement(array1, array2) {
 
 function ListItem({ item, i }) {
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
+  const [ toggled, setToggled ] = useState(tasks[item] && tasks[item]["toggle"])
+
+  function onToggle()
+  {
+    updateTasks(tasks => {
+      if (!tasks[item]) return
+      tasks[item]["toggle"] = !toggled
+      setToggled(!toggled)
+    })
+  }
+
+  useEffect(() => {
+    if (tasks[item] && toggled != tasks[item]["toggle"])
+      setToggled(tasks[item]["toggle"])
+  }, [tasks[item]])
   
-  return <View style={styles.itemContainer} key={i}>
-    <CheckBox checked={tasks[item] && tasks[item]["toggle"]} setChecked={(value) => {
-      updateTasks(tasks => {
-        tasks[item]["toggle"] = value
-      })
-    }} />
+  return <Pressable style={styles.itemContainer} key={i} onPress={onToggle}>
+    <CheckBox checked={toggled}/>
     <Text style={[styles.item, (tasks[item] && tasks[item]["toggle"]) ? styles.itemToggled : null]}>{item} </Text>
-  </View>
+  </Pressable>
 }
 
 function ListFooter({listId}) {
@@ -186,6 +197,7 @@ function TaskList({ route, navigation }) {
 
 export default function TaskListScreen({ navigation, route })
 {
+  const [loadedLists, _, updateLoadedLists ] = store.useState("loadedLists")
   const { listId } = route.params;
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const unsubscribe = navigation.addListener('blur', (e) => {
@@ -196,6 +208,13 @@ export default function TaskListScreen({ navigation, route })
       })
     })
   });
+
+  useEffect(() => {
+    console.log("Load")
+    updateLoadedLists(loadedLists => {
+      loadedLists["Lists:"+listId] = true
+    })
+  }, [])
 
   return <Stack.Navigator>
     <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listId: listId }} options={{headerShown:false}}/>

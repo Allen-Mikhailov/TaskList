@@ -45,10 +45,11 @@ store.setState("tasks", {
 store.setState("settings", {});
 store.setState("lists", {});
 store.setState("tags", defaultTags);
+store.setState("loadedLists", {})
 
 export default function App() {
   const [ lists, setLists, updateLists ] = store.useState("lists")
-
+//tabBar={props => <View/>}>
   return (
 <NavigationContainer>
   <DataManager name="lists"    datakey={listsKey}/>
