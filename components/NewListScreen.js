@@ -7,8 +7,6 @@ import { getNewId } from '../modules/keys';
 
 import TagSymbol from './TagSymbol';
 
-store.setState("newListTags", {})
-
 function ListScreen({ route, navigation })
 {
     const [ listName, setListName ] = useState("")
@@ -69,6 +67,7 @@ function ListScreen({ route, navigation })
                     console.log("Transfering", "List:"+id)
                     DeviceEventEmitter.emit("event.screenTransfer", "List:"+id)
                 })
+                navigation.navigate("NewList")
                 setErrorMessage("")
             }
             }/>
@@ -91,15 +90,28 @@ export default function NewListScreen({navigation})
     const [loadedLists] = store.useState("loadedLists")
     const [screenTransfer, setScreenTransfer] = useState()
 
-    DeviceEventEmitter.addListener("event.screenTransfer", (screen) => {
-        console.log("Transfer", screen)
-        setScreenTransfer(screen)
-    })
+    function listLoadUpdate()
+    {
+        console.log("List Load Uodaye", loadedLists[screenTransfer])
+        console.log("TransferLoad", loadedLists, screenTransfer)
+        if (loadedLists[screenTransfer])
+        {
+            console.log("Navigated to", screenTransfer)
+            setScreenTransfer("Null")
+            navigation.navigate(screenTransfer)
+        }
+    }
 
     useEffect(() => {
-        if (loadedLists[screenTransfer])
-            navigation.navigate(screenTransfer)
-    }, [loadedLists, screenTransfer])
+        DeviceEventEmitter.addListener("event.screenTransfer", (screen) => {
+            console.log("Transfer", screen)
+            setScreenTransfer(screen)
+        })
+
+        const unsubscribe = store.getState("loadedLists").subscribe(listLoadUpdate)
+    }, [])
+
+    useEffect(listLoadUpdate, [loadedLists, screenTransfer])
 
     return <Stack.Navigator>
         <Stack.Screen name="NewList" component={NewList} options={{headerShown:false}}/>

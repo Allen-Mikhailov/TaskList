@@ -160,8 +160,8 @@ function TaskList({ route, navigation }) {
   const [tags, setTags] = store.useState("tags")
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const [data, setData] = useState([])
-  console.log(lists)
-  console.log(listId)
+  // console.log(lists)
+  // console.log(listId)
 
   useEffect(() => {
     const newData = []
@@ -201,6 +201,8 @@ export default function TaskListScreen({ navigation, route })
   const { listId } = route.params;
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const unsubscribe = navigation.addListener('blur', (e) => {
+    // console.log("List:"+listId)
+    navigation.navigate("List:"+listId)
     updateTasks(tasks => {
       Object.keys(tasks).map(key => {
         if (tasks[key]["toggle"])
@@ -210,9 +212,8 @@ export default function TaskListScreen({ navigation, route })
   });
 
   useEffect(() => {
-    console.log("Load")
     updateLoadedLists(loadedLists => {
-      loadedLists["Lists:"+listId] = true
+      loadedLists["List:"+listId] = true
     })
   }, [])
 
