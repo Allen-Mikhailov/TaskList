@@ -33,6 +33,13 @@ const defaultTags = {
   }
 }
 
+const defaultLists = {
+  "testKey": {
+    name: "test",
+    tags: ["School"]
+  }
+}
+
 store.setState("tasks", {
   HelloWorld: {
     "toggle": true,
@@ -46,7 +53,7 @@ store.setState("tasks", {
 store.setState("settings", {});
 store.setState("lists", {});
 store.setState("tags", defaultTags);
-store.setState("loadedLists", {})
+store.setState("loadedLists", defaultLists)
 store.setState("newListTags", {})
 
 export default function App() {
@@ -61,15 +68,6 @@ export default function App() {
   })
   }, [])
 
-  function Update()
-  {
-    console.log("Has Updated")
-    console.log("LocalLists", localLists)
-    return true
-  }
-
-  //tabBar={props => <View/>}
-
   return (
 <NavigationContainer>
   <DataManager name="lists"    datakey={listsKey}/>
@@ -77,7 +75,10 @@ export default function App() {
   <DataManager name="settings" datakey={settingsKey}/>
   <DataManager name="tags"     datakey={tagsKey}/>
   <Stack.Navigator>
-    <Stack.Screen name="Home" component={HomeScreen}/>
+    <Stack.Screen name="Home" 
+    component={HomeScreen} 
+    options={{headerShown: false}}
+    />
     <Stack.Screen name="Settings" component={SettingsScreen}/>
     {localLists && Object.entries(localLists).map(([listId, list]) => <Stack.Screen 
           name={"List:"+listId} 
