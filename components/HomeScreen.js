@@ -6,6 +6,7 @@ import { store } from '../store.js';
 // Images
 const dotImg = require("../images/dot.png")
 const settingsImg = require("../images/wrench.png")
+const newListImg = require("../images/plus.png")
 
 function ListItem({ listId, list, navigation })
 {
@@ -25,6 +26,14 @@ function SettingsButton({ navigation })
     </Pressable>
 }
 
+function NewListButton({ navigation })
+{
+    return <Pressable style={styles.settingsButton} title=""
+        onPress={() => navigation.navigate("NewListScreen")}>
+        <Image source={newListImg} style={styles.fullImage}></Image>
+    </Pressable>
+}
+
 function HomeScreen({ route, navigation })
 {
     const [lists, setLists] = store.useState("lists")
@@ -35,6 +44,7 @@ function HomeScreen({ route, navigation })
                 list={list} navigation={navigation} listId={listId}/>)}
         </ScrollView>
         <SettingsButton navigation={navigation}/>
+        <NewListButton navigation={navigation}/>
     </View>
 }
 
@@ -89,9 +99,15 @@ const styles = StyleSheet.create({
         aspectRatio: 1,
         right: 10,
         bottom: 10
+    },
+
+    newListButton: {
+        position: "absolute",
+        width: "10%",
+        aspectRatio: 1,
+        right: 10,
+        top: 10
     }
-
-
 })
 
 
