@@ -80,7 +80,7 @@ export default function App() {
     options={{headerShown: false}}
     />
     <Stack.Screen name="Settings" component={SettingsScreen}/>
-    {localLists && Object.entries(localLists).map(([listId, list]) => <Stack.Screen 
+    {Object.entries(localLists || {}).map(([listId, list]) => <Stack.Screen 
           name={"List:"+listId} 
           component={TaskList} 
           initialParams={{ listId: listId }}
