@@ -27,12 +27,11 @@ function SettingsButton({ navigation })
 
 function HomeScreen({ route, navigation })
 {
-    const [loadedLists, _, updateLoadedLists ] = store.useState("loadedLists")
-
+    const [lists, setLists] = store.useState("lists")
     return <View style={styles.body}>
         <Text style={styles.title}>Task List</Text>
         <ScrollView style={styles.scroll}>
-            {Object.entries(loadedLists).map(([listId, list]) => <ListItem key={listId}
+            {Object.entries(lists).map(([listId, list]) => <ListItem key={listId}
                 list={list} navigation={navigation} listId={listId}/>)}
         </ScrollView>
         <SettingsButton navigation={navigation}/>

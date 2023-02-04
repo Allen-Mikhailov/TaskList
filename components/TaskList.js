@@ -178,7 +178,8 @@ function TaskList({ route, navigation }) {
       <Text style={styles.listTitle}>{lists[listId].name}</Text>
       <Pressable onPress={() => navigation.navigate("EditList")}><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
       <View style={styles.tagDisplay}>
-        {Object.entries(lists[listId].tags).map(([tagName, tagD]) => {
+        {Object.entries(lists[listId].tags).map(([i, tagName]) => {
+          console.log("Tag: "+tagName)
           return <TagSymbol tag={tagName} key={tagName} color={tags[tagName].color} />
         })}
       </View>
@@ -197,25 +198,18 @@ function TaskList({ route, navigation }) {
 
 export default function TaskListScreen({ navigation, route })
 {
-  const [loadedLists, _, updateLoadedLists ] = store.useState("loadedLists")
   const { listId } = route.params;
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
-  const unsubscribe = navigation.addListener('blur', (e) => {
-    // console.log("List:"+listId)
-    navigation.navigate("List:"+listId)
-    updateTasks(tasks => {
-      Object.keys(tasks).map(key => {
-        if (tasks[key]["toggle"])
-          delete tasks[key]
-      })
-    })
-  });
-
-  useEffect(() => {
-    updateLoadedLists(loadedLists => {
-      loadedLists["List:"+listId] = true
-    })
-  }, [])
+  // const unsubscribe = navigation.addListener('blur', (e) => {
+  //   // console.log("List:"+listId)
+  //   navigation.navigate("List:"+listId)
+  //   updateTasks(tasks => {
+  //     Object.keys(tasks).map(key => {
+  //       if (tasks[key]["toggle"])
+  //         delete tasks[key]
+  //     })
+  //   })
+  // });
 
   return <Stack.Navigator>
     <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listId: listId }} options={{headerShown:false}}/>

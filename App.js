@@ -51,20 +51,16 @@ store.setState("tasks", {
   }
 });
 store.setState("settings", {});
-store.setState("lists", {});
+store.setState("lists", defaultLists);
 store.setState("tags", defaultTags);
-store.setState("loadedLists", defaultLists)
 store.setState("newListTags", {})
 
 export default function App() {
   const [ lists, setLists, updateLists ] = store.useState("lists")
-  const [localLists, setLocalLists ] = useState([])
 
   useEffect(() => {
     const unsubscribe = store.getState("lists").subscribe(function(lists){
       console.log("Lists", lists)
-      console.log("Setnewlists")
-      setLocalLists(lists)
   })
   }, [])
 
@@ -80,7 +76,7 @@ export default function App() {
     options={{headerShown: false}}
     />
     <Stack.Screen name="Settings" component={SettingsScreen}/>
-    {Object.entries(localLists || {}).map(([listId, list]) => <Stack.Screen 
+    {Object.entries(lists || {}).map(([listId, list]) => <Stack.Screen 
           name={"List:"+listId} 
           component={TaskList} 
           initialParams={{ listId: listId }}
