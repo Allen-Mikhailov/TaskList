@@ -8,6 +8,7 @@ import { store } from './store';
 import TaskList from './screens/TaskList.js';
 import SettingsScreen from './screens/SettingsScreen';
 import NewListScreen from './screens/NewListScreen.js';
+import mainstyles from './modules/mainstyles';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';

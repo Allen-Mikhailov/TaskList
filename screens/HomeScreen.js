@@ -3,40 +3,43 @@ import { StyleSheet, Text, View, Button , TextInput, ScrollView, Image, Pressabl
 import { useEffect, useState } from 'react';
 import { store } from '../store.js';
 
+import mainstyles from '../modules/mainstyles.js';
+
 // Images
-const dotImg = require("../images/dot.png")
-const settingsImg = require("../images/wrench.png")
-const newListImg = require("../images/plusIcon.png")
+const arrowImg = require("../images/arrow.png")
 
 function ListItem({ listId, list, navigation })
 {
     return <View style={styles.listFrame}>
-        <Image style={styles.listDot} source={dotImg}></Image>
         <Pressable title={list.name} onPress={() => navigation.navigate("List:"+listId)} style={styles.listTitle}>
             <Text style={styles.listTitle}>{list.name || "Error: NoName :("}</Text>
+            <View style={styles.listSubContainer}>
+                <Text style={styles.listItemCount}>0</Text>
+                <Image style={styles.listArrow} source={arrowImg}></Image>
+            </View>
         </Pressable>
     </View>
 }
 
 function SettingsButton({ navigation })
 {
-    return <Pressable style={styles.settingsButton} title=""
+    return <Pressable style={styles.settingsButton}
         onPress={() => navigation.navigate("Settings")}>
-        <Image source={settingsImg} style={styles.fullImage}></Image>
+            <Text style={styles.buttonText}>Edit</Text>
     </Pressable>
 }
 
 function NewListButton({ navigation })
 {
-    return <Pressable style={styles.newListButton} title=""
+    return  <Pressable style={styles.newListButton}
         onPress={() => navigation.navigate("NewListScreen")}>
-        <Image source={newListImg} style={styles.fullImage}></Image>
+            <Text style={styles.buttonText}>New List</Text>
     </Pressable>
 }
 
 function HomeScreenHeader({ route, navigation })
 {
-    return <Text>Test</Text>
+    return <></>
 }
 
 function HomeScreen({ route, navigation })
@@ -57,7 +60,7 @@ const styles = StyleSheet.create({
     body: {
         width: "100%",
         height: "100%",
-        // backgroundColor: "red"
+        backgroundColor: mainstyles.backgroundColor
     },
 
     title: {
@@ -75,9 +78,11 @@ const styles = StyleSheet.create({
     listFrame: {
         width: "100%",
         aspectRatio: 6,
-        backgroundColor: "red",
+        borderRadius: "10%",
+        backgroundColor: mainstyles.itemColor,
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        justifyContent: 'center'
     },
 
     listDot: {
@@ -88,9 +93,12 @@ const styles = StyleSheet.create({
     },
 
     listTitle: {
-        fontSize: "25%",
-        marginLeft: "10%",
-        top: "-3%"
+        // textAlignVertical: "center",
+        fontSize: "20%",
+        marginLeft: "2%",
+        // height: "100%",
+        // top: "-3%",
+        color: mainstyles.infoColor
     },
 
     fullImage: {
@@ -100,18 +108,49 @@ const styles = StyleSheet.create({
 
     settingsButton: {
         position: "absolute",
-        width: "10%",
         aspectRatio: 1,
         right: 10,
-        bottom: 10
+        bottom: 10,
+    },
+
+    buttonText: {
+        color: mainstyles.buttonColor,
+        fontSize: "20%"
+    },
+
+    listItemCount: {
+        position: "absolute",
+        fontSize: "17%",
+        color: mainstyles.subInfoColor,
+        right: "45%",
+        // width: "100%",
+        // height: "100%"
+    },
+
+    listSubContainer: {
+        position: "absolute",
+        height: "100%",
+        right: "2%",
+        width: "15%",
+        justifyContent: "center"
+},
+
+    listArrow: {
+        position: "absolute",
+        width: 15,
+        height: 15,
+        right: "2%",
+        tintColor: mainstyles.subInfoColor,
+        transform: [{rotate: "180deg"}, {translateY: 0}]
     },
 
     newListButton: {
+        color: mainstyles.buttonColor,
         position: "absolute",
-        width: "10%",
+        // width: "10%",
         aspectRatio: 1,
-        right: 10,
-        top: 10
+        left: 10,
+        bottom: 10
     }
 })
 
