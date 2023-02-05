@@ -5,9 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { store } from '../store';
 import { getNewId } from '../modules/keys';
 
-import TagSymbol from './TagSymbol';
+import TagSymbol from '../components/TagSymbol';
 
-function ListScreen({ route, navigation })
+function NewListScreen({navigation})
 {
     const [ listName, setListName ] = useState("")
     const [ tags, setTags ] = store.useState("tags")
@@ -67,7 +67,6 @@ function ListScreen({ route, navigation })
                     console.log("Transfering", "List:"+id)
                     DeviceEventEmitter.emit("event.screenTransfer", "List:"+id)
                 })
-                navigation.navigate("NewList")
                 setErrorMessage("")
             }
             }/>
@@ -76,50 +75,7 @@ function ListScreen({ route, navigation })
     </View>
 }
 
-const Stack = createStackNavigator();
-
-function NewList({ route, navigation })
-{
-    return <View style={styles.container}>
-        <Button title="Create New List" onPress={() => navigation.navigate("NewListModal")}/>
-    </View>
-}
-
-export default function NewListScreen({navigation})
-{
-    const [loadedLists] = store.useState("loadedLists")
-    const [screenTransfer, setScreenTransfer] = useState()
-
-    function listLoadUpdate()
-    {
-        console.log("List Load Uodaye", loadedLists[screenTransfer])
-        console.log("TransferLoad", loadedLists, screenTransfer)
-        if (loadedLists[screenTransfer])
-        {
-            console.log("Navigated to", screenTransfer)
-            setScreenTransfer("Null")
-            navigation.navigate(screenTransfer)
-        }
-    }
-
-    useEffect(() => {
-        DeviceEventEmitter.addListener("event.screenTransfer", (screen) => {
-            console.log("Transfer", screen)
-            setScreenTransfer(screen)
-        })
-
-        const unsubscribe = store.getState("loadedLists").subscribe(listLoadUpdate)
-    }, [])
-
-    useEffect(listLoadUpdate, [loadedLists, screenTransfer])
-
-    return <Stack.Navigator>
-        <Stack.Screen name="NewList" component={NewList} options={{headerShown:false}}/>
-        <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="NewListModal" component={ListScreen}/>
-        </Stack.Group>
-    </Stack.Navigator>
-}
+export default NewListScreen
 
 const styles = StyleSheet.create({
     container: {

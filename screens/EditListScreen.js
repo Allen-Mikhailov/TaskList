@@ -6,7 +6,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 import { store } from '../store.js';
-import TagSymbol from './TagSymbol.js';
+import TagSymbol from '../components/TagSymbol.js';
 
 export default function EditListScreen({ navigation, route })
 {

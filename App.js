@@ -5,14 +5,13 @@ import { useEffect, useState } from 'react';
 import DataManager from './components/DataManager';
 import { store } from './store';
 
-import TaskList from './components/TaskList.js';
-import SettingsScreen from './components/SettingsScreen';
-import NewListScreen from './components/NewListScreen.js';
-import EditListScreen from './components/EditListScreen';
+import TaskList from './screens/TaskList.js';
+import SettingsScreen from './screens/SettingsScreen';
+import NewListScreen from './screens/NewListScreen.js';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './components/HomeScreen';
+import {HomeScreen, HomeScreenHeader} from './screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -81,6 +80,9 @@ export default function App() {
           component={TaskList} 
           initialParams={{ listId: listId }}
           key={"List:"+listId}
+          options={{
+            headerTitle: (props) => <HomeScreenHeader {...props}/>
+          }}
           />)
           }
     <Stack.Screen name="NewListScreen" component={NewListScreen}/>

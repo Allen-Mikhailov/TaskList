@@ -6,7 +6,7 @@ import { store } from '../store.js';
 // Images
 const dotImg = require("../images/dot.png")
 const settingsImg = require("../images/wrench.png")
-const newListImg = require("../images/plus.png")
+const newListImg = require("../images/plusIcon.png")
 
 function ListItem({ listId, list, navigation })
 {
@@ -28,10 +28,15 @@ function SettingsButton({ navigation })
 
 function NewListButton({ navigation })
 {
-    return <Pressable style={styles.settingsButton} title=""
+    return <Pressable style={styles.newListButton} title=""
         onPress={() => navigation.navigate("NewListScreen")}>
         <Image source={newListImg} style={styles.fullImage}></Image>
     </Pressable>
+}
+
+function HomeScreenHeader({ route, navigation })
+{
+    return <Text>Test</Text>
 }
 
 function HomeScreen({ route, navigation })
@@ -111,4 +116,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default HomeScreen;
+export {HomeScreen, HomeScreenHeader};

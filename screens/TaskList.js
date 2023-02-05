@@ -12,7 +12,7 @@ import EditListScreen from './EditListScreen.js';
 import { store } from '../store.js';
 
 import CheckBox from '../components/RadioButton';
-import TagSymbol from './TagSymbol.js';
+import TagSymbol from '../components/TagSymbol.js';
 
 const styles = StyleSheet.create({
   FlatList: {
