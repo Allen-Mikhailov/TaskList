@@ -16,6 +16,7 @@ import {HomeScreen, HomeScreenHeader} from './screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
+// Note to switch to files
 const listsKey = '@lists:0.2'
 const tagsKey = '@tags:0.0'
 const settingsKey = '@settings:0.0'
