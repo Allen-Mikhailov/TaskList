@@ -126,7 +126,11 @@ function TaskList({ route, navigation }) {
         })}
       </View>
     </View>
-    <SimpleButton text="Edit" onPress={() => navigation.navigate("EditList")}/>
+    <SimpleButton text="Edit" onPress={() => navigation.navigate("EditList")} style={{
+      position: "absolute",
+      right: mainstyles.buttonMargins,
+      bottom: mainstyles.buttonMargins,
+    }}/>
     <View style={styles.FlatList}>
       <FlatList
         data={data}

@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 
 export default function({style, text, textStyle, onPress})
 {
-    return <Pressable style={style} onPres={onPress}>
+    return <Pressable style={style} onPress={onPress}>
         <Text style={[styles.text, textStyle]}>{text}</Text>
     </Pressable>
 }
