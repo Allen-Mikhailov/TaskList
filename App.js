@@ -82,7 +82,10 @@ export default function App() {
           initialParams={{ listId: listId }}
           key={"List:"+listId}
           options={{
-            headerTitle: (props) => <HomeScreenHeader {...props}/>
+            headerTitle: (props) => <HomeScreenHeader {...props}/>,
+            headerStyle: {
+              backgroundColor: '#000000',
+            },
           }}
           />)
           }

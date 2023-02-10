@@ -4,5 +4,6 @@ export default {
     titleColor: "#0c60e8",
     itemColor: "#242424",
     infoColor: "#ffffff",
-    subInfoColor: "#8f8f8f"
+    subInfoColor: "#8f8f8f",
+    buttonMargins: 10
 }

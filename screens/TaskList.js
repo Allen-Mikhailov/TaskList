@@ -9,71 +9,13 @@ const windowHeight = Dimensions.get('window').height;
 
 import EditListScreen from './EditListScreen.js';
 
+import mainstyles from '../modules/mainstyles.js';
+import SimpleButton from '../components/SimpleButton.js';
+
 import { store } from '../store.js';
 
 import CheckBox from '../components/RadioButton';
 import TagSymbol from '../components/TagSymbol.js';
-
-const styles = StyleSheet.create({
-  FlatList: {
-    width: "100%",
-    marginVertical: 30,
-    justifyContent: "left",
-    alignItems: "left",
-    justifyContent: 'top',
-    flex: 1
-
-  },
-  itemContainer: {
-    // justifyContent: "center",
-    flexDirection: "row",
-    width: windowWidth * .98,
-    marginLeft: "2%",
-  },
-
-  item: {
-    fontSize: "30%",
-    textAlign: "left",
-    marginLeft: "2%",
-  },
-
-  itemToggled: {
-    color: "#aaa",
-  },
-  header: {
-    height: "15%",
-    width: "100%",
-    backgroundColor: "#ddd"
-  },
-  container: {
-    width: "100%",
-    height: "100%"
-  },
-  listTitle: {
-    left: "5%",
-    fontSize: "45%",
-    marginTop: 10
-    // textAlign: "center"
-  },
-  tagDisplay: {
-    flexDirection: "row",
-    paddingLeft: 10
-  },
-  ListFooterComponent: {
-    width: windowWidth,
-    height: "250%",
-    // backgroundColor: "red"
-  },
-  wrenchIcon: {
-    width: windowHeight * .075,
-    height: windowHeight * .075,
-    position: "absolute",
-    // top: "10%",
-    top: -windowHeight * .05,
-    left: "80%",
-    // backgroundColor: "red"
-  }
-})
 
 const wrenchIcon = require("../images/wrench.png")
 
@@ -184,6 +126,7 @@ function TaskList({ route, navigation }) {
         })}
       </View>
     </View>
+    <SimpleButton text="Edit" onPress={() => navigation.navigate("EditList")}/>
     <View style={styles.FlatList}>
       <FlatList
         data={data}
@@ -196,20 +139,74 @@ function TaskList({ route, navigation }) {
   </View>
 }
 
+const styles = StyleSheet.create({
+  FlatList: {
+    width: "100%",
+    marginVertical: 30,
+    justifyContent: "left",
+    alignItems: "left",
+    justifyContent: 'top',
+    flex: 1,
+    backgroundColor: mainstyles.backgroundColor
+
+  },
+  itemContainer: {
+    // justifyContent: "center",
+    flexDirection: "row",
+    width: windowWidth * .98,
+    marginLeft: "2%",
+  },
+
+  item: {
+    fontSize: "30%",
+    textAlign: "left",
+    marginLeft: "2%",
+  },
+
+  itemToggled: {
+    color: "#aaa",
+  },
+  header: {
+    height: "15%",
+    width: "100%",
+    // backgroundColor: "#ddd"
+  },
+  container: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: mainstyles.backgroundColor
+  },
+  listTitle: {
+    left: "5%",
+    fontSize: "45%",
+    marginTop: 10,
+    color: mainstyles.infoColor
+    // textAlign: "center"
+  },
+  tagDisplay: {
+    flexDirection: "row",
+    paddingLeft: 10
+  },
+  ListFooterComponent: {
+    width: windowWidth,
+    height: "250%",
+    // backgroundColor: "red"
+  },
+  wrenchIcon: {
+    width: windowHeight * .075,
+    height: windowHeight * .075,
+    position: "absolute",
+    // top: "10%",
+    top: -windowHeight * .05,
+    left: "80%",
+    // backgroundColor: "red"
+  }
+})
+
 export default function TaskListScreen({ navigation, route })
 {
   const { listId } = route.params;
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
-  // const unsubscribe = navigation.addListener('blur', (e) => {
-  //   // console.log("List:"+listId)
-  //   navigation.navigate("List:"+listId)
-  //   updateTasks(tasks => {
-  //     Object.keys(tasks).map(key => {
-  //       if (tasks[key]["toggle"])
-  //         delete tasks[key]
-  //     })
-  //   })
-  // });
 
   return <Stack.Navigator>
     <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listId: listId }} options={{headerShown:false}}/>
