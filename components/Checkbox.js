@@ -6,11 +6,11 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         borderWidth: 1,
-        borderColor: "#000",
+        borderColor: "#fff",
         borderRadius: "5%",
     },
     checkboxContainer: {
-        borderColor: "#000",
+        borderColor: "#fff",
         border: "10%",
         // justifyContent: "center"
     },

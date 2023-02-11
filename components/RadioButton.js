@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30,
         borderWidth: 1,
-        borderColor: "#000",
+        borderColor: "#fff",
         borderRadius: "50%",
     },
     checkmark: {

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from '../store';
-import { getNewId } from '../modules/keys';
+import { getNewId } from '../modules/utils';
 
 import TagSymbol from '../components/TagSymbol';
 

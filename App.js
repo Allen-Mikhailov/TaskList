@@ -14,6 +14,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {HomeScreen, HomeScreenHeader} from './screens/HomeScreen';
 
+import EditListScreen from './screens/EditListScreen';
+
 const Stack = createNativeStackNavigator();
 
 // Note to switch to files
@@ -56,6 +58,8 @@ store.setState("lists", defaultLists);
 store.setState("tags", defaultTags);
 store.setState("newListTags", {})
 
+store.setState("editList", "")
+
 export default function App() {
   const [ lists, setLists, updateLists ] = store.useState("lists")
 
@@ -73,10 +77,6 @@ export default function App() {
     settingsKey: "settings",
     tagsKey: "tags",
   }}/>
-  {/* <DataManager name="lists"    datakey={listsKey}/>
-  <DataManager name="tasks"    datakey={tasksKey}/>
-  <DataManager name="settings" datakey={settingsKey}/>
-  <DataManager name="tags"     datakey={tagsKey}/> */}
   <Stack.Navigator>
     <Stack.Screen name="Home" 
     component={HomeScreen} 
@@ -90,13 +90,20 @@ export default function App() {
           key={"List:"+listId}
           options={{
             headerTitle: (props) => <HomeScreenHeader {...props}/>,
+            headerTintColor: mainstyles.buttonColor,
             headerStyle: {
               backgroundColor: '#000000',
             },
           }}
           />)
           }
-    <Stack.Screen name="NewListScreen" component={NewListScreen}/>
+    <Stack.Screen name="EditListScreen" component={EditListScreen} options={{
+            headerTitle: (props) => <HomeScreenHeader {...props}/>,
+            headerTintColor: mainstyles.buttonColor,
+            headerStyle: {
+              backgroundColor: '#000',
+            },
+          }}/>
   </Stack.Navigator>
 </NavigationContainer>
   );
