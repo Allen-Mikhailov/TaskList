@@ -67,10 +67,16 @@ export default function App() {
 
   return (
 <NavigationContainer>
-  <DataManager name="lists"    datakey={listsKey}/>
+  <DataManager dataKeys={{
+    listsKey: "lists",
+    tasksKey: "tasks",
+    settingsKey: "settings",
+    tagsKey: "tags",
+  }}/>
+  {/* <DataManager name="lists"    datakey={listsKey}/>
   <DataManager name="tasks"    datakey={tasksKey}/>
   <DataManager name="settings" datakey={settingsKey}/>
-  <DataManager name="tags"     datakey={tagsKey}/>
+  <DataManager name="tags"     datakey={tagsKey}/> */}
   <Stack.Navigator>
     <Stack.Screen name="Home" 
     component={HomeScreen} 
