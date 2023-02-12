@@ -54,7 +54,7 @@ function NewListButton({ navigation })
         updateLists((lists) => {
             const id = "Creating:"+getNewId(lists)
             lists[id] = {
-                name: "",
+                name: "Untitled",
                 tags: []
             }
             setEditListId(id)
@@ -117,7 +117,8 @@ const styles = StyleSheet.create({
         backgroundColor: mainstyles.itemColor,
         display: "flex",
         flexDirection: "column",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: "2%"
     },
 
     listDot: {

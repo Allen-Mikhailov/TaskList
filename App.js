@@ -72,10 +72,10 @@ export default function App() {
   return (
 <NavigationContainer>
   <DataManager dataKeys={{
-    listsKey: "lists",
-    tasksKey: "tasks",
-    settingsKey: "settings",
-    tagsKey: "tags",
+    lists: listsKey,
+    tasks: tasksKey,
+    settings: settingsKey,
+    tags: tagsKey,
   }}/>
   <Stack.Navigator>
     <Stack.Screen name="Home" 

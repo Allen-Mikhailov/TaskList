@@ -38,8 +38,8 @@ function DataManager({ dataKeys })
   }, [])
 
   return <>
-    {Object.keys(dataKeys).map(key => {
-      <DataChild datakey={key} name={dataKeys[key]} checked={checked}/>
+    {Object.keys(dataKeys).map(name => {
+      <DataChild datakey={dataKeys[name]} name={name} checked={checked}/>
     })}
   </>
 }
