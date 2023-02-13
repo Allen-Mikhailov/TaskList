@@ -2,10 +2,15 @@ import { StyleSheet, Text, View, Image, Pressable, ScrollView, TextInput, Toucha
 import { useEffect, useState } from 'react';
 import {Keyboard} from 'react-native'
 
+import SimpleButton from "../components/SimpleButton.js"
+
 import { store } from '../store.js';
 import mainstyles from '../modules/mainstyles.js';
 
 const checkMark = require("../images/whiteCheck.png")
+import IconButton from '../components/IconButton.js';
+
+const deleteIcon = require("../images/DeleteIcon.png")
 
 function EditListScreen()
 {
@@ -14,7 +19,7 @@ function EditListScreen()
     let [tags, setTags] = store.useState("tags")
     const [ listName, setListName ] = useState(lists[editListId]? lists[editListId].name: "Untitled")
 
-    const [toggledTags, setToggledTags, updateToggledTags] = store.useState("tags")
+    const [toggledTags, setToggledTags] = useState({})
 
     // useEffect(() => {
     //     updateToggledTags((toggledTags) => {
@@ -23,6 +28,20 @@ function EditListScreen()
     //         })
     //     })
     // }, [tags])
+
+    function saveEdits()
+    {
+        updateLists((lists) => {
+            const newtags = []
+            Object.keys(toggledTags).map((key, index) => {
+                if (toggledTags[key])
+                    newtags.push(key)
+            })
+            lists[editListId].tags = newtags
+            lists[editListId].name = listName
+
+        })
+    }
 
     return <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
@@ -36,9 +55,12 @@ function EditListScreen()
                 <Text style={styles.tagPickerLabel}>Tags</Text>
                 <ScrollView style={styles.tagPicker}>
                     {Object.keys(tags).map((tag, index) => 
-                        <Pressable style={styles.tag} onPress={() => updateToggledTags((toggledTags) => {
-                            toggledTags[tag] = !toggledTags[tag]
-                        })} key={index}>
+                        <Pressable style={styles.tag} onPress={() => {
+                            const newTags = Object.assign({}, toggledTags)
+                        newTags[tag] = !newTags[tag]
+
+                            setToggledTags(newTags)
+                        }} key={index}>
                             <Image source={checkMark} style={[styles.tagCheckMark, 
                                 {tintColor: toggledTags[tag]? mainstyles.buttonColor:mainstyles.backgroundColor}]}/>
                             <Text style={styles.tagLabel}>{tag}</Text>
@@ -46,6 +68,13 @@ function EditListScreen()
                     )}
                 </ScrollView>
             </View>
+
+            <View style={styles.themeDropDownContainer}>
+
+            </View>
+
+            <SimpleButton text="Save / Apply" style={styles.SaveButtonStyle} onPress={saveEdits}/>
+            <IconButton source={deleteIcon} style={styles.deleteIcon}/>
         </View>
     </TouchableWithoutFeedback>
 }
@@ -122,6 +151,28 @@ const styles = StyleSheet.create({
         borderRadius: "5%",
         tintColor: mainstyles.buttonColor
     },
+
+    themeDropDownContainer: {
+        position: "absolute",
+        right: "10%",
+        width: '35%',
+        height: "60%",
+    },
+    SaveButtonStyle: {
+        position: "absolute",
+        textAlign: "center",
+        bottom: "20%",
+        borderWidth: 1,
+        borderColor: mainstyles.buttonColor,
+        borderRadius: "5%",
+        padding: 4
+    },
+    deleteIcon: {
+        position: "absolute",
+        right: mainstyles.buttonMargins,
+        bottom: mainstyles.buttonMargins,
+        // backgroundColor: "red"
+    }
 })
 
 export default EditListScreen

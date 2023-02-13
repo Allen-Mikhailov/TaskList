@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import mainstyles from '../modules/mainstyles';
 
 const styles = StyleSheet.create({
     markBackground: {
         width: 30,
         height: 30,
         borderWidth: 1,
-        borderColor: "#fff",
+        borderColor: mainstyles.buttonColor,
         borderRadius: "50%",
     },
     checkmark: {
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
         width: "70%",
         height: "70%",
         borderRadius: "50%",
-        backgroundColor: "#aaa"
+        backgroundColor: mainstyles.buttonColor
     },
 })
 

@@ -52,7 +52,7 @@ function NewListButton({ navigation })
     function createNewList(lists)
     {
         updateLists((lists) => {
-            const id = "Creating:"+getNewId(lists)
+            const id = getNewId(lists)
             lists[id] = {
                 name: "Untitled",
                 tags: []

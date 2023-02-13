@@ -109,15 +109,8 @@ function TaskList({ route, navigation }) {
   return <View style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.listTitle}>{lists[listId].name}</Text>
-      <Pressable onPress={() => navigation.navigate("EditList")}><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
-      {/* <View style={styles.tagDisplay}>
-        {Object.entries(lists[listId].tags).map(([i, tagName]) => {
-          console.log("Tag: "+tagName)
-          return <TagSymbol tag={tagName} key={tagName} color={tags[tagName].color} />
-        })}
-      </View> */}
     </View>
-    <SimpleButton text="Edit" onPress={() => {setEditListId(listId); navigation.navigate("EditList")}} style={{
+    <SimpleButton text="Edit" onPress={() => {setEditListId(listId); navigation.navigate("EditListScreen")}} style={{
       position: "absolute",
       right: mainstyles.buttonMargins,
       bottom: mainstyles.buttonMargins,
@@ -137,7 +130,8 @@ function TaskList({ route, navigation }) {
 const styles = StyleSheet.create({
   FlatList: {
     width: "100%",
-    marginVertical: 30,
+    marginTop: 20,
+    marginBottom: 40,
     justifyContent: "left",
     alignItems: "left",
     justifyContent: 'top',
@@ -164,7 +158,7 @@ const styles = StyleSheet.create({
     color: "#aaa",
   },
   header: {
-    height: "15%",
+    // height: "15%",
     width: "100%",
     // backgroundColor: "#ddd"
   },
@@ -188,7 +182,7 @@ const styles = StyleSheet.create({
   },
   ListFooterComponent: {
     width: windowWidth,
-    height: "250%",
+    height: 5000,
     // backgroundColor: "red"
   },
   wrenchIcon: {

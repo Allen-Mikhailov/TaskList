@@ -94,6 +94,7 @@ export default function App() {
             headerStyle: {
               backgroundColor: '#000000',
             },
+            title: "Back"
           }}
           />)
           }
