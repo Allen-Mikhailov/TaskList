@@ -1,185 +1,178 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Pressable, Dimensions, TextInput, Image } from 'react-native';
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import { StyleSheet, Text, View, Image, Pressable, ScrollView, TextInput, TouchableWithoutFeedback  } from 'react-native';
+import { useEffect, useState } from 'react';
+import {Keyboard} from 'react-native'
+
+import SimpleButton from "../components/SimpleButton.js"
 
 import { store } from '../store.js';
-import TagSymbol from '../components/TagSymbol.js';
+import mainstyles from '../modules/mainstyles.js';
 
-export default function EditListScreen({ navigation, route })
+const checkMark = require("../images/whiteCheck.png")
+import IconButton from '../components/IconButton.js';
+
+const deleteIcon = require("../images/DeleteIcon.png")
+
+function EditListScreen()
 {
-    const { listId } = route.params;
+    const [editListId, setEditListId ]  = store.useState("editList")
     const [lists, setLists, updateLists] = store.useState("lists")
-    const [tags, setTags] = store.useState("tags")
-    const [ newListName, setNewListName ] = useState(lists[listId].name)
-    const [ changed, setChanged ] = useState(false)
+    let [tags, setTags] = store.useState("tags")
+    const [ listName, setListName ] = useState(lists[editListId]? lists[editListId].name: "Untitled")
 
-    function DeleteList()
+    const [toggledTags, setToggledTags] = useState({})
+
+    // useEffect(() => {
+    //     updateToggledTags((toggledTags) => {
+    //         Object.keys(tags).map((tag) => {
+    //             toggledTags[tag] = toggledTags[tag] || false
+    //         })
+    //     })
+    // }, [tags])
+
+    function saveEdits()
     {
-        updateLists(lists => {
-            delete lists[listId]
+        updateLists((lists) => {
+            const newtags = []
+            Object.keys(toggledTags).map((key, index) => {
+                if (toggledTags[key])
+                    newtags.push(key)
+            })
+            lists[editListId].tags = newtags
+            lists[editListId].name = listName
+
         })
     }
 
-    function ApplyEdits()
-    {
-        updateLists(lists => {
-            lists[listId].name = newListName
-        })
-        setChanged(false)
-    }
+    return <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <View style={styles.container}>
+            <View style={styles.editNameContainer}>
+                <Text style={styles.listNameLabel}>List Name:</Text>
+                <TextInput value={listName} onChangeText={setListName} style={styles.listNameInput}/>
+            </View>
 
-    function ListNameChanged(newText)
-    {
-        if (newText != listId && !changed)
-            setChanged(true)
-        setNewListName(newText)
-    }
+            {/* Tag Picker */}
+            <View style={styles.tagPickerWrapper}>
+                <Text style={styles.tagPickerLabel}>Tags</Text>
+                <ScrollView style={styles.tagPicker}>
+                    {Object.keys(tags).map((tag, index) => 
+                        <Pressable style={styles.tag} onPress={() => {
+                            const newTags = Object.assign({}, toggledTags)
+                        newTags[tag] = !newTags[tag]
 
-    return <View style={styles.container}>
-        {/* Edit List Header */}
-        <Text style={styles.header}>{newListName}</Text>
+                            setToggledTags(newTags)
+                        }} key={index}>
+                            <Image source={checkMark} style={[styles.tagCheckMark, 
+                                {tintColor: toggledTags[tag]? mainstyles.buttonColor:mainstyles.backgroundColor}]}/>
+                            <Text style={styles.tagLabel}>{tag}</Text>
+                        </Pressable>
+                    )}
+                </ScrollView>
+            </View>
 
-        {/* Edit List Name */}
-        <View style={styles.EditListNameContainer}>
-            <Text style={styles.EditListNameText}>List Name</Text> 
-            <TextInput 
-                defaultValue={newListName} 
-                onChangeText={ListNameChanged} 
-                placeholder="Untitled" 
-                style={styles.EditListNameInput}
-            />
+            <View style={styles.themeDropDownContainer}>
+
+            </View>
+
+            <SimpleButton text="Save / Apply" style={styles.SaveButtonStyle} onPress={saveEdits}/>
+            <IconButton source={deleteIcon} style={styles.deleteIcon}/>
         </View>
-
-        {/* Tag Editor */}
-        <View style={styles.tagBackground}>
-            <FlatList
-            style={styles.tagContainer} 
-            data={Object.keys(tags)}
-            renderItem={({item}) => <Pressable style={styles.tag} onPress={
-                () => updateLists(lists => {
-                    if (lists[listId].tags[item])
-                        delete lists[listId].tags[item]
-                    else
-                        lists[listId].tags[item] = true
-                })}>
-                    <View style={[styles.tagCircle, {backgroundColor: tags[item].color || "red"}]}/>
-                    <Text style={styles.tagText}>{item}</Text>
-                    {lists[listId].tags[item] && <Image source={require("../images/whiteCheck.png")} style={styles.tagCheck}/>}
-                </Pressable>}
-            />
-        </View>
-
-        {/* Apply Button */}
-        {changed && <Pressable style={styles.applyButton} onPress={ApplyEdits}>
-            <Text style={styles.applyText}> APPLY </Text>
-        </Pressable>}
-
-        {/* Delete Button */}
-        <Pressable style={styles.deleteButton} onPress={DeleteList}>
-            <Text style={styles.deleteText}>DELETE</Text>
-        </Pressable>
-    </View>
+    </TouchableWithoutFeedback>
 }
 
 const styles = StyleSheet.create({
     container: {
+        width: "100%",
+        height: "100%",
+        backgroundColor: mainstyles.backgroundColor,
+
         flex: 1,
-        backgroundColor: '#fff',
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center'
-    },
-    EditListNameContainer: {
-        flexDirection: "row",
-        margin: "5%"
-    },
-    EditListNameText: {
-        fontSize: "25%",
-        marginRight: "5%",
-        padding: "2%",
-    },
-    EditListNameInput: {
-        borderWidth: 2,
-        borderRadius: "7.6%",
-        fontSize: "25%",
-        padding: "2%",
-        width: "50%",
-    },
-    deleteButton: {
-        borderRadius: "10%",
-        backgroundColor: "#f7746a",
-        borderWidth: 3,
-        borderColor: "#e33947",
-        padding: "3%",
-        paddingHorizontal: "10%",
-    },
-    deleteText: {
-        fontSize: "15%",
-        color: "white",
-        fontWeight: "bold"
-    },
-    applyButton: {
-        borderRadius: "10%",
-        backgroundColor: "#58f58c",
-        borderWidth: 3,
-        borderColor: "#13ab45",
-        padding: "3%",
-        paddingHorizontal: "10%",
-        marginBottom: "3%"
-    },
-    applyText: {
-        fontSize: "15%",
-        color: "black",
-        fontWeight: "bold"
-    },
-    header: {
-        fontSize: "50%"
     },
 
-    // Tag editor
-    tagBackground: {
-        width: "50%",
-        height: "40%",
-        backgroundColor: "grey",
-        borderRadius: "25%",
-        marginBottom: "5%",
-        borderWidth: 2
+    editNameContainer: {
+        // marginTop: "5%",
+        // backgroundColor: "red",
+        width: "80%",
+        height: "10%",
+
+        // flex: 1,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: 'center'
     },
-    tagContainer: {
-        width: "100%",
-        marginVertical: "10%",
-        borderTopWidth: 2,
+    listNameLabel: {
+        color: mainstyles.titleColor,
+        fontSize: "20%"
+    },
+    listNameInput: {
+        color: "#fff",
+        fontSize: "35%",
+    },
+
+    tagPickerWrapper: {
+        width: "35%",
+        marginLeft: "-45%",
+        height: "60%",
+        marginTop: "5%"
+    },
+
+    tagPickerLabel: {
+        color: mainstyles.buttonColor,
+        fontSize: "20%",
+        marginBottom: "3%",
+    },
+
+    tagPicker: {
+        // backgroundColor: "red",
     },
     tag: {
         width: "100%",
-        height: windowHeight*.075,
-        borderBottomWidth: 2,
-        justifyContent: "space-evenly",
-    },
-    tagCircle: {
-        width: windowWidth*.05,
-        height: windowWidth*.05,
-        borderRadius: "50%",
-        marginLeft: "5%",
-        // position: "relative",
-        top: "25%"
-    },
-    tagText: {
         fontSize: "20%",
-        marginLeft: "20%",
-        top: "-25%",
-        fontWeight: "bold",
-        color: "white",
+        marginBottom: "1%",
+
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: "center"
     },
-    tagCheck: {
-        width: windowWidth*.08,
-        height: windowWidth*.08,
-        borderRadius: "50%",
-        marginLeft: "80%",
-        top: "20%",
+
+    tagLabel: {
+        color: mainstyles.infoColor,
+        fontSize: "30%",
+        marginLeft: "4%",
+    },
+
+    tagCheckMark: {
+        width: '20%',
+        height: undefined,
+        aspectRatio: 1,
+        borderColor: mainstyles.buttonColor,
+        borderWidth: 1,
+        borderRadius: "5%",
+        tintColor: mainstyles.buttonColor
+    },
+
+    themeDropDownContainer: {
         position: "absolute",
-        // top: windowWidth*(.075-.05)
+        right: "10%",
+        width: '35%',
+        height: "60%",
+    },
+    SaveButtonStyle: {
+        position: "absolute",
+        textAlign: "center",
+        bottom: "20%",
+        borderWidth: 1,
+        borderColor: mainstyles.buttonColor,
+        borderRadius: "5%",
+        padding: 4
+    },
+    deleteIcon: {
+        position: "absolute",
+        right: mainstyles.buttonMargins,
+        bottom: mainstyles.buttonMargins,
+        // backgroundColor: "red"
     }
 })
+
+export default EditListScreen

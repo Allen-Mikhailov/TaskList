@@ -7,8 +7,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-import EditListScreen from './EditListScreen.js';
-
 import mainstyles from '../modules/mainstyles.js';
 import SimpleButton from '../components/SimpleButton.js';
 
@@ -19,16 +17,8 @@ import TagSymbol from '../components/TagSymbol.js';
 
 const wrenchIcon = require("../images/wrench.png")
 
-function findCommonElement(array1, array2) {
-  for (let i = 0; i < array1.length; i++) {
-    for (let j = 0; j < array2.length; j++) {
-      if (array1[i] === array2[j]) {
-        return true;
-      }
-    }
-  }
-  return false;
-}
+import { findCommonElement } from '../modules/utils.js';
+
 
 function ListItem({ item, i }) {
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
@@ -102,6 +92,7 @@ function TaskList({ route, navigation }) {
   const [tags, setTags] = store.useState("tags")
   const [tasks, setTasks, updateTasks] = store.useState("tasks")
   const [data, setData] = useState([])
+  const [editListId, setEditListId ]  = store.useState("editList")
   // console.log(lists)
   // console.log(listId)
 
@@ -118,15 +109,8 @@ function TaskList({ route, navigation }) {
   return <View style={styles.container}>
     <View style={styles.header}>
       <Text style={styles.listTitle}>{lists[listId].name}</Text>
-      <Pressable onPress={() => navigation.navigate("EditList")}><Image style={styles.wrenchIcon} source={wrenchIcon}/></Pressable>
-      <View style={styles.tagDisplay}>
-        {Object.entries(lists[listId].tags).map(([i, tagName]) => {
-          console.log("Tag: "+tagName)
-          return <TagSymbol tag={tagName} key={tagName} color={tags[tagName].color} />
-        })}
-      </View>
     </View>
-    <SimpleButton text="Edit" onPress={() => navigation.navigate("EditList")} style={{
+    <SimpleButton text="Edit" onPress={() => {setEditListId(listId); navigation.navigate("EditListScreen")}} style={{
       position: "absolute",
       right: mainstyles.buttonMargins,
       bottom: mainstyles.buttonMargins,
@@ -146,7 +130,8 @@ function TaskList({ route, navigation }) {
 const styles = StyleSheet.create({
   FlatList: {
     width: "100%",
-    marginVertical: 30,
+    marginTop: 20,
+    marginBottom: 40,
     justifyContent: "left",
     alignItems: "left",
     justifyContent: 'top',
@@ -159,26 +144,29 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: windowWidth * .98,
     marginLeft: "2%",
+    marginBottom: "3%",
   },
 
   item: {
-    fontSize: "30%",
+    fontSize: "20%",
     textAlign: "left",
     marginLeft: "2%",
+    color: "#fff",
   },
 
   itemToggled: {
     color: "#aaa",
   },
   header: {
-    height: "15%",
+    // height: "15%",
     width: "100%",
     // backgroundColor: "#ddd"
   },
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: mainstyles.backgroundColor
+    backgroundColor: mainstyles.backgroundColor,
+    color: "#fff"
   },
   listTitle: {
     left: "5%",
@@ -189,11 +177,12 @@ const styles = StyleSheet.create({
   },
   tagDisplay: {
     flexDirection: "row",
-    paddingLeft: 10
+    paddingLeft: 10,
+    color: "#fff"
   },
   ListFooterComponent: {
     width: windowWidth,
-    height: "250%",
+    height: 5000,
     // backgroundColor: "red"
   },
   wrenchIcon: {
@@ -207,15 +196,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function TaskListScreen({ navigation, route })
-{
-  const { listId } = route.params;
-  const [tasks, setTasks, updateTasks] = store.useState("tasks")
-
-  return <Stack.Navigator>
-    <Stack.Screen name="TaskList" component={TaskList} initialParams={{ listId: listId }} options={{headerShown:false}}/>
-    <Stack.Group screenOptions={{ presentation: 'modal' }}>
-      <Stack.Screen name="EditList" component={EditListScreen} initialParams={{ listId: listId }}/>
-    </Stack.Group>
-  </Stack.Navigator>
-}
+export default TaskList

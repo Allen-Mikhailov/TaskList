@@ -2,6 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button , TextInput, ScrollView, Image, Pressable } from 'react-native';
 import { useEffect, useState } from 'react';
 import { store } from '../store.js';
+import { findCommonElement } from '../modules/utils.js';
+
+import { getNewId, newListTemplate } from '../modules/utils.js';
 
 import mainstyles from '../modules/mainstyles.js';
 
@@ -10,11 +13,23 @@ const arrowImg = require("../images/arrow.png")
 
 function ListItem({ listId, list, navigation })
 {
+    const [data, setData] = useState([])
+    const [tasks, setTasks, updateTasks] = store.useState("tasks")
+
+    useEffect(() => {
+        const newData = []
+        Object.entries(tasks).forEach(([taskName, task]) => {
+        if (findCommonElement(Object.keys(list.tags), Object.keys(task.tags)))
+            newData.push(taskName)
+        })
+        setData(newData)
+    }, [list, tasks])
+
     return <View style={styles.listFrame}>
         <Pressable title={list.name} onPress={() => navigation.navigate("List:"+listId)} style={styles.listTitle}>
             <Text style={styles.listTitle}>{list.name || "Error: NoName :("}</Text>
             <View style={styles.listSubContainer}>
-                <Text style={styles.listItemCount}>0</Text>
+                <Text style={styles.listItemCount}>{data.length}</Text>
                 <Image style={styles.listArrow} source={arrowImg}></Image>
             </View>
         </Pressable>
@@ -31,8 +46,25 @@ function SettingsButton({ navigation })
 
 function NewListButton({ navigation })
 {
+    const [lists, setLists, updateLists] = store.useState("lists")
+    const [editListId, setEditListId ]  = store.useState("editList")
+
+    function createNewList(lists)
+    {
+        updateLists((lists) => {
+            const id = getNewId(lists)
+            lists[id] = {
+                name: "Untitled",
+                tags: []
+            }
+            setEditListId(id)
+        })
+
+        navigation.navigate("EditListScreen")
+    }
+
     return  <Pressable style={styles.newListButton}
-        onPress={() => navigation.navigate("NewListScreen")}>
+        onPress={createNewList}>
             <Text style={styles.buttonText}>New List</Text>
     </Pressable>
 }
@@ -46,7 +78,7 @@ function HomeScreen({ route, navigation })
 {
     const [lists, setLists] = store.useState("lists")
     return <View style={styles.body}>
-        <Text style={styles.title}>Task List</Text>
+        <Text style={styles.title}>Lists</Text>
         <ScrollView style={styles.scroll}>
             {Object.entries(lists).map(([listId, list]) => <ListItem key={listId}
                 list={list} navigation={navigation} listId={listId}/>)}
@@ -65,8 +97,11 @@ const styles = StyleSheet.create({
 
     title: {
         textAlign: "center",
-        marginTop: "4%",
-        fontSize: "55%"
+        marginTop: "8%",
+        marginBottom: "3%",
+        fontSize: "25%",
+        // marginLeft: "-40%",
+        color: mainstyles.titleColor
     },
 
     scroll: {
@@ -82,7 +117,8 @@ const styles = StyleSheet.create({
         backgroundColor: mainstyles.itemColor,
         display: "flex",
         flexDirection: "column",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: "2%"
     },
 
     listDot: {
