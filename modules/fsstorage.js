@@ -1,8 +1,27 @@
 import RNFS from 'react-native-fs';
 
-function storageInit()
+const mainFolderPath = "taskListData"
+
+async function DirHasFolder(dir, folder)
 {
-    // if ()
+    const dirStuff = await RNFS.readDir(dir)
+
+    for (let i = 0; i < dirStuff.length; i++)
+    {
+        if (dirStuff[i].name == folder && dirStuff[i].isDirectory())
+            return true
+    }
+    return false
+}
+
+async function storageInit()
+{
+    const mainDir = await RNFS.readDir(RNFS.DocumentDirectoryPath)
+
+    if (!await DirHasFolder(mainDir, mainFolderPath))
+    {
+        await RNFS.mkdir(RNFS.DocumentDirectoryPath+"/"+mainFolderPath);
+    }
 }
 
 function storeData(key, data)
@@ -21,4 +40,4 @@ function getJsonData(key)
 }
 
 
-export { storeData, getData, getJsonData }
+export { storeData, getData, getJsonData, storageInit }
